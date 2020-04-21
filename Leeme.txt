@@ -1,0 +1,7 @@
+Integrantes: Erardo Bertoldi, Sebastian Garcia, Joaquin Roman.
+
+Titulo: Pacman Covid
+
+Resumen: La idea propuesta es realizar un juego a través del lenguaje de programación Python, basándonos en el clásico y tradicional juego de Pac-Man al que le implementaremos una temática relacionada con la pandemia Covid-19 a modo de concientizar sobre las medidas de prevención contra la Pandemia.
+
+Entorno de desarrollo: Visual Studio Code con el Lenguaje Python.
