@@ -2,6 +2,10 @@ Integrantes: Erardo Bertoldi, Sebastian Garcia, Joaquin Roman.
 
 Titulo: Pacman Covid
 
-Resumen: La idea propuesta es realizar un juego a través del lenguaje de programación Python, basándonos en el clásico y tradicional juego de Pac-Man al que le implementaremos una temática relacionada con la pandemia Covid-19 a modo de concientizar sobre las medidas de prevención contra la Pandemia.
+Resumen: La propuesta es realizar un juego a través del lenguaje de programación Python, basándonos en el clásico y tradicional juego de Pac-Man al que le implementaremos una temática relacionada con la pandemia Covid-19 y la característica de multijugador.
+Incluiremos al juego la posibilidad de incorporar mas de un jugador, es decir que dos jugadores o un máximo de tres jugarores tal como es el número de integrantes de este grupo, puedan participar en la misma partida con un personaje distino, jugando colaborativamente contra los Covid. En el caso que el juego inicie con un solo jugador, el tablero tendrá un tamaño asignado, distinto y mas grande será el tamaño del tablero si se incorporan mas jugadores.
+El jugador pierde una vida si entra en contacto con un Covid. Habrán en el tablero vacunas que el personaje PacMan podrá colectar para gozar de inmunidad al virus por unos pocos segundos lo cual el permitirá comerse a los Covid que pueda. 
+Asimismo el tablero estará lleno de items a colectar por los PacMan. El juego finaliza una vez que el o los PacMan participantes se hayan comido todos los ítems, lo cual le sumará puntaje de forma individual y el que tenga mayor puntaje será el ganador de la partida.
+El juego será desarrollado en 2D usando la librería Pygame de Python.
 
 Entorno de desarrollo: Visual Studio Code con el Lenguaje Python.
