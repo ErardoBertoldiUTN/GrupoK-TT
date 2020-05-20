@@ -1,4 +1,4 @@
-  # Proyecto de Joaquin Roman, codificado en Visual Studio 2017.
+  # Proyecto de Joaquin Roman, codificado en Visual Studio 2019.
 
 print ("CONSTANTE DE KAPREKAR. \nPara números de cuatro dígitos que tenga al menos dos diferentes, el valor esperado es 6174")
 
