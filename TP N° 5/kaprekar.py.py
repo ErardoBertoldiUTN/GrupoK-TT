@@ -1,18 +1,17 @@
 def main():   #http://conocepython.blogspot.com/p/la-funcion-main.html
-    #programa principal. Desde aquí inicia nuestro programa mostrando por pantalla la consigna que realizará nuestro código
+    #programa principal. Desde aqui inicia nuestro programa mostrando por pantalla el enunciado que realizarÃ¡ nuestro cÃ³digo
     print("Constante de Kaprekar")
-    print("1.Elija un número de cuatro dígitos que tenga al menos dos diferentes (es válido colocar el dígito 0 al principio, por lo que el número 0009 es válido).\nSi ingresa un número con menos de cuatro cifras, se completará con ceros para convertirlo a numero de cuatro cifras.")
-    print("Si ingresa un número mayor o menor a cuatro cifras, se escribirá un mensaje en pantalla al respecto")
-    print("2.Se colocarán sus dígitos en orden ascendente y en orden descendente para formar dos nuevos números")
-    print("3.Se restará el menor al mayor.\n4.Vuelve al paso 2 hasta llegar a la constante 6174.")
+    print("1.Elija un nÃºmero de cuatro dÃ­gitos que tenga al menos dos diferentes (es vÃ¡lido colocar el dÃ­gito 0 al principio, por lo que el nÃºmero 0009 es vÃ¡lido).\nSi ingresa un nÃºmero con menos de cuatro cifras, se completarÃ¡ con ceros para convertirlo a numero de cuatro cifras.")
+    print("Si ingresa un nÃºmero mayor o menor a cuatro cifras, se escribirÃ¡ un mensaje en pantalla al respecto")
+    print("2.Se colocarÃ¡n sus dÃ­gitos en orden ascendente y en orden descendente para formar dos nuevos nÃºmeros")
+    print("3.Se restarÃ¡ el menor al mayor.\n4.Vuelve al paso 2 hasta llegar a la constante 6174.")
     casosPrueba = int(input("Ingresa el numero de casos de prueba: "))   #esta variable guardará la cantidad de números a analizar
     contador = 1
-    while contador <= casosPrueba:   #Este ciclo while lo que hace es controlar que se vayan pidiendo los números de a uno por vez,
-                                        #y a cada uno de esos números se le determinará la cantidad de iteraciones necesarias para llegar la constate de Kaprekar
+    while contador <= casosPrueba:   
 
-        while True:         #este ciclo while controlará que yo ingrese si o si un dato entero, caso contrario el programa explotaría si ingreso por error una letra
+        while True:         
 
-            numeroIng = str(input("Ingrese el "+str(contador)+"° número\n"))
+            numeroIng = str(input("Ingrese el "+str(contador)+"Â° nÃºmero\n"))
             try:
                 entero = int(numeroIng)
                 break  
@@ -68,3 +67,4 @@ def numMay(numero):
     return 
 
 main()
+
