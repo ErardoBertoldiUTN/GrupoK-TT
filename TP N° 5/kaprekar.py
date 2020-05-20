@@ -1,4 +1,4 @@
-#entorno utilizado: IDLE (Python 3.8 64 bits)   SEBASTIAN GARCIA
+#entorno utilizado: IDLE (Python 3.8 64 bits)   GRUPO K
 #NOTA:si quiere ver por pantalla las restas sucesivas que va haciendo el programa hasta llegar a la constante, se debe descomentar el print() dentro de la funcion Kaprekar
 def main():   #http://conocepython.blogspot.com/p/la-funcion-main.html
     #programa principal. Desde aquí inicia nuestro programa mostrando por pantalla la consigna que realizará nuestro código
