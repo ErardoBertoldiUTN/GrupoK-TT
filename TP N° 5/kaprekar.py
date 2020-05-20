@@ -64,7 +64,34 @@ def Kaprekar(numero):    #con esta función voy a ir haciendo las iteraciones nec
     return numeroIteraciones
 
 def numMay(numero):    
+    num = str(numero)      
+    if len(num) == 1:      
+        num = '000' + num
+    else:
+        if len(num) == 2:
+            num = '00' + num
+        else:
+            if len(num) == 3:
+                num = '0' + num
+    cifraMayor = ""         #donde guardaremos el número mas grande que se pueda obtener. Lo inicializo sin nada
+    cifraCompleta = False   
+
+    while cifraCompleta == False:
+        mayor = int(num[0])      #asignamos el primer caracter de la cadena num a mayor y lo transformamos en un entero
+        cont = 0                 #el contador lo usamos para recorrer la cadena contenida en num
+        while cont < len(num) -1:  
+            cont += 1
+            digito = int(str(num[cont]))  #asignamos el siguiente valor de la cadena num a la variable digito, tranformándolo en un entero
+            if digito > mayor:            #si digito es mas grande que mayor, le asignamos su valor a mayor
+                mayor = digito            #una vez que finalice el ciclo while, en esta variable habremos asignado el mayor dígito de la cadena
+
         
-    return 
+        cifraMayor +=str(mayor)    #le vamos asignando a cifraMayor el valor contenido en mayor
+        #print("cifraMayor"+cifraMayor)
+        num = num.replace(str(mayor), "", 1)  
+        #print("num"+num)
+        if len(cifraMayor) == 4:  #si cifraMayor posee cuatro caracteres... 
+            cifraCompleta = True #se le asigna true a cifraCompleta saliendo del primer ciclo while
+    return int(cifraMayor) 
 
 main()
