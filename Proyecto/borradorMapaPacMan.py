@@ -1,3 +1,6 @@
+#iniciando el borrador de un mapa para PacMan.... el personaje no tiene movimiento
+#continuo, es decir, se mueve de un paso por vez y hay que apretar reiteradas veces la tecla para que se vaya moviendo
+#quiero que se mueva continuamente al mantener la tecla apretada
 import pygame
 from pygame import Rect
 #inicializar
