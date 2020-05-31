@@ -1,17 +1,39 @@
-#ya se logrÛ el movimiento continuo, cambiÈ las teclas de movimiento por letras porq son m·s cÛmodas de usar en el teclado de las flechas
+#ya se logr√≥ el movimiento continuo, cambi√© las teclas de movimiento por letras porq son m√°s c√≥modas de usar en el teclado de las flechas
 import pygame
 from pygame import Rect
 #inicializar
 pygame.init()
 
 #medidas
-ANCHO=1280
-ALTO=650
+ANCHO=1270
+ALTO=640
 
 #colores
 NEGRO=(0,0,0)
 AZUL=(0,0,255)
-MARRON=(0,255,0)
+VERDE=(0,255,0)
+MARRON=(150,70,10)
+#Mapas
+#1270/40=32 baldosas a lo ancho
+#640/40=16 baldosas a lo largo
+mapa=[
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X                              X",
+    "X     XXXXXXXXXXXXXXXXXXXX     X",
+    "X                              X",
+    "X         XXX          XXX     X",
+    "X   X                          X",
+    "X    X                         X",
+    "X     X                        X",
+    "X      X                       X",
+    "X                              X",
+    "X   X  XXXXXXXXXXXXXXXXXXXX    X",
+    "X   X                          X",
+    "X   X                          X",
+    "X   X                          X",
+    "X                              X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
 
 #funciones
 def dibujar_muro(superficie, rectangulo):
@@ -19,19 +41,32 @@ def dibujar_muro(superficie, rectangulo):
 
 def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
+    
+def construir_mapa(mapa):
+    muros=[]
+    x=0
+    y=0
+    for fila in mapa:
+        for muro in fila:
+            if muro == "X":
+                muros.append(pygame.Rect(x,y,40,40))
+            x+=40
+        x=0
+        y+=40
+    return muros
+
+def dibujar_mapa(superficie, muros):
+    for muro in muros:
+        dibujar_muro(superficie,muro)
 
 #Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
 
 #datos
-muros = [
-    pygame.Rect(500,100,300,100),          #dibujamos el mapa
-    pygame.Rect(200,200,100,300),
-    pygame.Rect(500,500,300,100),
-    pygame.Rect(1000,200,100,300)]
-                                    
-personaje= pygame.Rect(600,400,40,40)
+muros=construir_mapa(mapa)
+direccion=""
+personaje= pygame.Rect(40,40,40,40)
 personaje_vel_x=0               #coordenadas de ubicacion del personaje
 personaje_vel_y=0
 velocidad=10                         #constate para controlar la velocidad de movimiento del personaje
@@ -39,7 +74,7 @@ WASD = [False, False, False, False]#con esta lista boolean se controla cuando se
 #bucle ppal
 jugando = True
 while jugando:
-    reloj.tick(60)
+    
     #eventos
 ##    for event in pygame.event.get():
 ##        if event.type==pygame.QUIT:
@@ -114,7 +149,7 @@ while jugando:
             if event.key == pygame.K_d:
                 
                 WASD[3] = False
-
+    reloj.tick(60)
     ventana.fill(NEGRO)
     if WASD[0]:
         personaje.y-=velocidad
@@ -159,9 +194,9 @@ while jugando:
                 personaje.top=muro.bottom
     #dibujos
     
-    for muro in muros:
-        dibujar_muro(ventana, muro)
-
+##    for muro in muros:
+##        dibujar_muro(ventana, muro)
+    dibujar_mapa(ventana, muros)
     dibujar_personaje(ventana,personaje)
 
     #Actualizar
