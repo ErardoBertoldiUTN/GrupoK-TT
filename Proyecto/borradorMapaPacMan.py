@@ -1,5 +1,5 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
-#tiene un error al llegar a las esquinas, si presiono dos teclas a la vez se me sale de pantalla el personaje... corregir eso
+
 import pygame
 from pygame import Rect
 #inicializar
@@ -20,17 +20,17 @@ MARRON=(150,70,10)
 mapa=[
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "X                              X",
-    "X     XXXXXXXXXXXXXXXXXXXX     X",
-    "X                              X",
-    "X         XXX          XXX     X",
-    "X   X                          X",
-    "X    X                         X",
-    "X     X                        X",
-    "X      X                       X",
+    "X     XXXXXXXXXXXXXXXXXXXX  X  X",
+    "X                           X  X",
+    "X         XXX  XXXXXX  XXX     X",
+    "X   X                      X   X",
+    "X    X       XXXXXXXXXXXX  X   X",
+    "X     X                    X   X",
+    "X      X     XXXXXXXXXX        X",
     "X                              X",
     "X   X  XXXXXXXXXXXXXXXXXXXX    X",
     "X   X                          X",
-    "X   X                          X",
+    "X   X  XXXXXXXXXXXXXXXXXXXX    X",
     "X   X                          X",
     "X                              X",
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -70,7 +70,7 @@ direccion=""
 personaje= pygame.Rect(40,40,40,40)
 personaje_vel_x=0               #coordenadas de ubicacion del personaje
 personaje_vel_y=0
-velocidad=10                         #constate para controlar la velocidad de movimiento del personaje
+velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 WASD = [False, False, False, False]#con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento
 #bucle ppal
 jugando = True
@@ -163,40 +163,45 @@ while jugando:
         
     if WASD[3]:
         personaje.x+=velocidad
-    if event.type == pygame.QUIT: 
-            pygame.quit()
-    if personaje.x> ANCHO - personaje.width:
-        personaje.x=ANCHO - personaje.width
-    if personaje.x<0:
-        personaje.x=0
-    if personaje.y>ALTO - personaje.height:
-        personaje.y=ALTO-personaje.height
-    if personaje.y<0:
-        personaje.y=0
+##    if event.type == pygame.QUIT: 
+##            pygame.quit()
+##    if personaje.x> ANCHO - personaje.width:
+##        personaje.x=ANCHO - personaje.width
+##    if personaje.x<0:
+##        personaje.x=0
+##    if personaje.y>ALTO - personaje.height:
+##        personaje.y=ALTO-personaje.height
+##    if personaje.y<0:
+##        personaje.y=0
+##
+##    if personaje.x> ANCHO - personaje.width:
+##        personaje.x=ANCHO - personaje.width
+##    if personaje.x<0:
+##        personaje.x=0
+##    if personaje.y>ALTO - personaje.height:
+##        personaje.y=ALTO-personaje.height
+##    if personaje.y<0:
+##        personaje.y=0
 
-    if personaje.x> ANCHO - personaje.width:
-        personaje.x=ANCHO - personaje.width
-    if personaje.x<0:
-        personaje.x=0
-    if personaje.y>ALTO - personaje.height:
-        personaje.y=ALTO-personaje.height
-    if personaje.y<0:
-        personaje.y=0
-
+##    for muro in muros:
+##        if personaje.colliderect(muro):
+##            if direccion == "abajo":
+##                personaje.bottom=muro.top
+##            if direccion=="arriba":
+##                personaje.top=muro.bottom
+##            if direccion == "derecha":
+##                personaje.right = muro.left
+##            if direccion == "izquierda":
+##                personaje.left = muro.right
     for muro in muros:
         if personaje.colliderect(muro):
-            if direccion == "derecha":
-                personaje.right = muro.left
-            if direccion == "izquierda":
-                personaje.left = muro.right
-            if direccion == "abajo":
-                 personaje.bottom=muro.top
-            if direccion=="arriba":
-                personaje.top=muro.bottom
+            personaje.left = oldx
+            personaje.top = oldy
+    oldx = personaje.left
+    oldy = personaje.top
+
     #dibujos
     
-##    for muro in muros:
-##        dibujar_muro(ventana, muro)
     dibujar_mapa(ventana, muros)
     dibujar_personaje(ventana,personaje)
 
