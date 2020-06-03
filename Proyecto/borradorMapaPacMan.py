@@ -1,4 +1,5 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
+#tiene un error al llegar a las esquinas, si presiono dos teclas a la vez se me sale de pantalla el personaje... corregir eso
 import pygame
 from pygame import Rect
 #inicializar
