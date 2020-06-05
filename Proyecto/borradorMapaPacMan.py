@@ -1,4 +1,5 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
+#debo corregir que ahora si el personaje se desplaza en diagonal al tocar un muro se frena y yo quiero que continúe deslizándose por el muro según la teclas teclas de movimiento que esté presionando
 
 import pygame
 from pygame import Rect
@@ -67,8 +68,8 @@ reloj=pygame.time.Clock()
 #datos
 muros=construir_mapa(mapa)
 direccion=""
-personaje= pygame.Rect(40,40,40,40)
-personaje_vel_x=0               #coordenadas de ubicacion del personaje
+personaje= pygame.Rect(40,40,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
+personaje_vel_x=0                   #coordenadas de ubicacion del personaje
 personaje_vel_y=0
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 WASD = [False, False, False, False]#con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento
@@ -195,10 +196,30 @@ while jugando:
 ##                personaje.left = muro.right
     for muro in muros:
         if personaje.colliderect(muro):
-            personaje.left = oldx
-            personaje.top = oldy
-    oldx = personaje.left
-    oldy = personaje.top
+            personaje.left=oldx
+            personaje.top=oldy
+##            if direccion=="abajo" and direccion=="derecha":
+##                personaje.x = oldx
+##                personaje.y = oldy
+##            if direccion=="abajo" and direccion=="izquierda":
+##                personaje.x = oldx
+##                personaje.y = oldy
+##            if direccion=="arriba" and direccion=="derecha":
+##                personaje.x = oldx
+##                personaje.y = oldy
+##            if direccion=="arriba" and direccion=="izquierda":
+##                personaje.x = oldx
+##                personaje.y = oldy
+##            if direccion=="abajo":
+##                personaje.y = oldy
+##            if direccion=="arriba":
+##                personaje.y = oldy
+##            if direccion=="derecha":
+##                personaje.x=oldx
+##            if direccion=="izquierda":
+##                personaje.x=oldx
+    oldx = personaje.x
+    oldy = personaje.y
 
     #dibujos
     
