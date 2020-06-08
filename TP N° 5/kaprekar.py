@@ -1,3 +1,4 @@
+#https://github.com/ErardoBertoldiUTN/GrupoK-TT/tree/master/TP%20N%C2%B0%205
 #entorno utilizado: IDLE (Python 3.8 64 bits)   GRUPO K
 #NOTA:si quiere ver por pantalla las restas sucesivas que va haciendo el programa hasta llegar a la constante, se debe descomentar el print() dentro de la funcion Kaprekar
 def main():   #http://conocepython.blogspot.com/p/la-funcion-main.html
@@ -104,4 +105,4 @@ def numMay(numero):     #Esta función recibe la variable numero y ordenará sus
 
 main()  #debo colocar el llamado a la función main aquí. No es necesario utilizar una función main en python. El programa compila igual sin ella...
         #decidimos colocarla porque nos parecía que quedaba mas prolijo el código
-
+#https://github.com/ErardoBertoldiUTN/GrupoK-TT/tree/master/TP%20N%C2%B0%205
