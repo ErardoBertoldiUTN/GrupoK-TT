@@ -1,5 +1,5 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
-#debo corregir que ahora si el personaje se desplaza en diagonal al tocar un muro se frena y yo quiero que continúe deslizándose por el muro según la teclas teclas de movimiento que esté presionando
+
 
 import pygame
 from pygame import Rect
@@ -15,6 +15,7 @@ NEGRO=(0,0,0)
 AZUL=(0,0,255)
 VERDE=(0,255,0)
 MARRON=(150,70,10)
+ROJO=(255,0,0)
 #Mapas
 #1270/40=32 baldosas a lo ancho
 #640/40=16 baldosas a lo largo
@@ -43,7 +44,10 @@ def dibujar_muro(superficie, rectangulo):
 
 def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
-    
+
+def dibujar_enemigo(superficie, rectangulo):
+    pygame.draw.rect(superficie, ROJO, rectangulo)
+
 def construir_mapa(mapa):
     muros=[]
     x=0
@@ -73,6 +77,7 @@ personaje_vel_x=0                   #coordenadas de ubicacion del personaje
 personaje_vel_y=0
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 WASD = [False, False, False, False]#con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento
+enemigo=pygame.Rect(1190,560,30,30)
 #bucle ppal
 jugando = True
 while jugando:
@@ -225,7 +230,7 @@ while jugando:
     
     dibujar_mapa(ventana, muros)
     dibujar_personaje(ventana,personaje)
-
+    dibujar_enemigo(ventana,enemigo)
     #Actualizar
     pygame.display.update()
 
