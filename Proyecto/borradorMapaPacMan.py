@@ -1,5 +1,5 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
-
+#enemigo insertado. Nos persigue pero atraviesa paredes, corregir eso...
 
 import pygame
 from pygame import Rect
@@ -73,47 +73,19 @@ reloj=pygame.time.Clock()
 muros=construir_mapa(mapa)
 direccion=""
 personaje= pygame.Rect(40,40,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
-personaje_vel_x=0                   #coordenadas de ubicacion del personaje
-personaje_vel_y=0
+
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
-WASD = [False, False, False, False]#con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento
-enemigo=pygame.Rect(1190,560,30,30)
+#con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
+#Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
+WASD = [False, False, False, False]
+enemigo=pygame.Rect(1190,560,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
+
 #bucle ppal
 jugando = True
 while jugando:
     
-    #eventos
-##    for event in pygame.event.get():
-##        if event.type==pygame.QUIT:
-##            jugando=False
-##        if event.type==pygame.KEYDOWN:
-##            if event.key==pygame.K_ESCAPE:
-##                jugando= False
-##                
-##            if event.key==pygame.K_d:
-##                direccion="derecha"
-##                WASD[0]=True
-##                if WASD[0]==True:
-##                    personaje_vel_x+=velocidad
-##            if event.key==pygame.K_LEFT:
-##                direccion="izquierda"
-##                personaje_vel_x+=-velocidad
-##            if event.key==pygame.K_DOWN:
-##                direccion="abajo"
-##                personaje_vel_y=velocidad
-##            if event.key==pygame.K_UP:
-##                direccion="arriba"
-##                personaje_vel_y=-velocidad
-##        if event.type==pygame.KEYUP:
-##            if event.key==pygame.K_d:
-##                personaje_vel_x=0
-##            if event.key==pygame.K_LEFT:
-##                personaje_vel_x=0
-##            if event.key==pygame.K_DOWN:
-##                personaje_vel_y=0
-##            if event.key==pygame.K_UP:
-##                personaje_vel_y=0
-    for event in pygame.event.get():
+
+    for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
     
         if event.type == pygame.QUIT: 
         
@@ -123,25 +95,25 @@ while jugando:
             if event.key==pygame.K_ESCAPE:
                 jugando= False
             
-            if event.key == pygame.K_w: 
+            if event.key == pygame.K_w:   #arriba
                 
                 WASD[0] = True
                 direccion="arriba"
-            if event.key == pygame.K_s: 
+            if event.key == pygame.K_s:   #abajo
                 
                 WASD[2] = True
                 direccion="abajo"
-            if event.key == pygame.K_a: 
+            if event.key == pygame.K_a:   #izquierda
                 
                 WASD[1] = True
                 direccion="izquierda"
-            if event.key == pygame.K_d: 
+            if event.key == pygame.K_d:   #derecha
             
                 WASD[3] = True
                 direccion="derecha"
         if event.type == pygame.KEYUP:
             
-            if event.key == pygame.K_w:
+            if event.key == pygame.K_w:  
             
                 WASD[0] = False
             
@@ -169,63 +141,89 @@ while jugando:
         
     if WASD[3]:
         personaje.x+=velocidad
-##    if event.type == pygame.QUIT: 
-##            pygame.quit()
-##    if personaje.x> ANCHO - personaje.width:
-##        personaje.x=ANCHO - personaje.width
-##    if personaje.x<0:
-##        personaje.x=0
-##    if personaje.y>ALTO - personaje.height:
-##        personaje.y=ALTO-personaje.height
-##    if personaje.y<0:
-##        personaje.y=0
-##
-##    if personaje.x> ANCHO - personaje.width:
-##        personaje.x=ANCHO - personaje.width
-##    if personaje.x<0:
-##        personaje.x=0
-##    if personaje.y>ALTO - personaje.height:
-##        personaje.y=ALTO-personaje.height
-##    if personaje.y<0:
-##        personaje.y=0
 
-##    for muro in muros:
-##        if personaje.colliderect(muro):
-##            if direccion == "abajo":
-##                personaje.bottom=muro.top
-##            if direccion=="arriba":
-##                personaje.top=muro.bottom
-##            if direccion == "derecha":
-##                personaje.right = muro.left
-##            if direccion == "izquierda":
-##                personaje.left = muro.right
+
+
+#con los siguientes if logro hacer que el enemigo me persiga
+    if enemigo.x>personaje.x:         
+        enemigo.x-=1
+    elif enemigo.x<personaje.x:
+        enemigo.x+=1
+    if enemigo.y>personaje.y:
+        enemigo.y-=1
+    elif enemigo.y<personaje.y:
+        enemigo.y+=1
+#el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
+#porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
+#el personaje atravesaba el muro y aparecía el cualquier lado
     for muro in muros:
         if personaje.colliderect(muro):
-            personaje.left=oldx
-            personaje.top=oldy
-##            if direccion=="abajo" and direccion=="derecha":
-##                personaje.x = oldx
-##                personaje.y = oldy
-##            if direccion=="abajo" and direccion=="izquierda":
-##                personaje.x = oldx
-##                personaje.y = oldy
-##            if direccion=="arriba" and direccion=="derecha":
-##                personaje.x = oldx
-##                personaje.y = oldy
-##            if direccion=="arriba" and direccion=="izquierda":
-##                personaje.x = oldx
-##                personaje.y = oldy
-##            if direccion=="abajo":
-##                personaje.y = oldy
-##            if direccion=="arriba":
-##                personaje.y = oldy
-##            if direccion=="derecha":
-##                personaje.x=oldx
-##            if direccion=="izquierda":
-##                personaje.x=oldx
+            if direccion=="abajo" and direccion=="derecha":
+                WASD[2]=False
+                WASD[3]=False
+            elif direccion=="abajo" and direccion=="izquierda":
+                WASD[2]=False
+                WASD[1]=False
+            elif direccion=="arriba" and direccion=="derecha":
+                WASD[0]=False
+                WASD[3]=False
+            elif direccion=="arriba" and direccion=="izquierda":
+                WASD[0]=False
+                WASD[1]=False
+            elif direccion=="abajo":
+#                personaje.x=oldx
+                WASD[2]=False
+                if direccion=="derecha":
+                    if personaje.colliderect(muro):
+                        WASD[3]=False
+                        
+                if direccion=="izquierda":
+                    if personaje.colliderect(muro):
+                        WASD[1]=False 
+                        
+            if direccion=="arriba":
+#                personaje.x=oldx
+                WASD[0]=False
+                if direccion=="derecha":
+                    if personaje.colliderect(muro):
+                        WASD[3]=False
+                if direccion=="izquierda":
+                    if personaje.colliderect(muro):
+                        WASD[1]=False 
+
+            elif direccion=="derecha":
+#                personaje.y=oldy
+                WASD[3]=False
+                if direccion=="arriba":
+                    if personaje.colliderect(muro):
+                        WASD[0]=False
+                if direccion=="abajo":
+                    if personaje.colliderect(muro):
+                        WASD[2]=False 
+                
+            elif direccion=="izquierda":
+#                personaje.y=oldy
+                WASD[1]=False
+                if direccion=="arriba":
+                    if personaje.colliderect(muro):
+                        WASD[0]=False
+                if direccion=="abajo":
+                    if personaje.colliderect(muro):
+                        WASD[2]=False 
+            personaje.x=oldx
+            personaje.y=oldy
+
+
+        if enemigo.colliderect(muro):
+            enemigo.left=antx
+            enemigo.top=anty
+    antx=enemigo.x
+    anty=enemigo.y
+
     oldx = personaje.x
     oldy = personaje.y
-
+    
+    
     #dibujos
     
     dibujar_mapa(ventana, muros)
