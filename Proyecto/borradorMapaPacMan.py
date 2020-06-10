@@ -72,6 +72,7 @@ reloj=pygame.time.Clock()
 #datos
 muros=construir_mapa(mapa)
 direccion=""
+direccionEnemigo=""
 personaje= pygame.Rect(40,40,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
@@ -147,12 +148,16 @@ while jugando:
 #con los siguientes if logro hacer que el enemigo me persiga
     if enemigo.x>personaje.x:         
         enemigo.x-=1
+        direccionEnemigo="izquierda"
     elif enemigo.x<personaje.x:
         enemigo.x+=1
+        direccionEnemigo="derecha"
     if enemigo.y>personaje.y:
         enemigo.y-=1
+        direccionEnemigo="arriba"
     elif enemigo.y<personaje.y:
         enemigo.y+=1
+        direccionEnemigo="abajo"
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
 #el personaje atravesaba el muro y aparecía el cualquier lado
@@ -215,8 +220,14 @@ while jugando:
 
 
         if enemigo.colliderect(muro):
-            enemigo.left=antx
-            enemigo.top=anty
+            if direccionEnemigo=="arriba":
+                enemigo.y=anty
+            elif direccionEnemigo=="abajo":
+                enemigo.y=anty
+            elif direccionEnemigo=="derecha":
+                enemigo.x=antx
+            elif direccionEnemigo=="izquierda":
+                enemigo.x=antx
     antx=enemigo.x
     anty=enemigo.y
 
