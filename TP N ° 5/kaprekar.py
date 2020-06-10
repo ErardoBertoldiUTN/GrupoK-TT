@@ -20,7 +20,8 @@ def main():   #http://conocepython.blogspot.com/p/la-funcion-main.html
                 break  #si el numero ingresado es entero sale del bucle
             except ValueError:  #si ingreso otro tipo de datos, por ejemplo letras, me vuelve a pedir que ingrese un dato numérico
                 print ("La entrada es incorrecta: escriba un numero entero")
-                          
+                         
+                   
         if len(numeroIng) < 4:   #evalúa si el número tiene cuatro dígitos. De no ser así, pide que se ingrese un número de 4 dígitos 
             print("El número tiene menos de cuatro digitos. Ingrese otro numero de cuatro digitos")
         else:
