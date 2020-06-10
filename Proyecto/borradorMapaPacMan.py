@@ -72,7 +72,7 @@ reloj=pygame.time.Clock()
 #datos
 muros=construir_mapa(mapa)
 direccion=""
-direccionEnemigo=""
+
 personaje= pygame.Rect(40,40,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
@@ -186,7 +186,7 @@ while jugando:
                     if personaje.colliderect(muro):
                         WASD[1]=False 
                         
-            if direccion=="arriba":
+            elif direccion=="arriba":
 #                personaje.x=oldx
                 WASD[0]=False
                 if direccion=="derecha":
@@ -220,16 +220,32 @@ while jugando:
 
 
         if enemigo.colliderect(muro):
+##            if direccionEnemigo=="arriba" and "derecha":
+##                enemigo.x=antx
+##                enemigo.y=anty
+##            elif direccionEnemigo=="arriba" and "izquierda":
+##                enemigo.x=antx
+##                enemigo.y=anty
+##            elif direccionEnemigo=="abajo" and "derecha":
+##                enemigo.x=antx
+##                enemigo.y=anty
+##            elif direccionEnemigo=="abajo" and "izquierda":
+##                enemigo.x=antx
+##                enemigo.y=anty
+
+            if direccionEnemigo=="derecha":
+                enemigo.x=antx
+
+            if direccionEnemigo=="izquierda":
+                enemigo.x=antx
+
             if direccionEnemigo=="arriba":
                 enemigo.y=anty
-            elif direccionEnemigo=="abajo":
+            if direccionEnemigo=="abajo":
                 enemigo.y=anty
-            elif direccionEnemigo=="derecha":
-                enemigo.x=antx
-            elif direccionEnemigo=="izquierda":
-                enemigo.x=antx
-    antx=enemigo.x
+
     anty=enemigo.y
+    antx=enemigo.x
 
     oldx = personaje.x
     oldy = personaje.y
