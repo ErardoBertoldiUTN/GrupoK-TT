@@ -1,9 +1,10 @@
 #ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
-#enemigo insertado. Nos persigue pero atraviesa paredes cuando se mueve de izquierda a derecha, corregir eso...
-
+#movimiento de enemigo corregido funcionando bien!!
+import os
 import pygame
 from pygame import Rect
 #inicializar
+os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
 pygame.init()
 
 #medidas
@@ -73,14 +74,17 @@ reloj=pygame.time.Clock()
 muros=construir_mapa(mapa)
 direccion=""
 
-personaje= pygame.Rect(40,40,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
+personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 #con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
 WASD = [False, False, False, False]
-enemigo=pygame.Rect(1190,560,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
-
+enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
+moverseizq=True
+moverseDer=True
+moverseArriba=True
+moverseAbajo=True
 #bucle ppal
 jugando = True
 while jugando:
@@ -146,21 +150,22 @@ while jugando:
 
 
 #con los siguientes if logro hacer que el enemigo me persiga
+
     if enemigo.x>personaje.x:         
         enemigo.x-=1
-        direccionEnemigo="izquierda"
-    elif enemigo.x<personaje.x:
+        moverseizq=True
+    if enemigo.x<personaje.x:
         enemigo.x+=1
-        direccionEnemigo="derecha"
+        moverseDer=True
     if enemigo.y>personaje.y:
         enemigo.y-=1
-        direccionEnemigo="arriba"
-    elif enemigo.y<personaje.y:
+        moverseArriba=True
+    if enemigo.y<personaje.y:
         enemigo.y+=1
-        direccionEnemigo="abajo"
+        moverseAbajo=True
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
-#el personaje atravesaba el muro y aparecía el cualquier lado
+#el personaje atravesaba el muro y aparecía en cualquier lado
     for muro in muros:
         if personaje.colliderect(muro):
             if direccion=="abajo" and direccion=="derecha":
@@ -220,34 +225,70 @@ while jugando:
 
 
         if enemigo.colliderect(muro):
-##            if direccionEnemigo=="arriba" and "derecha":
-##                enemigo.x=antx
-##                enemigo.y=anty
-##            elif direccionEnemigo=="arriba" and "izquierda":
-##                enemigo.x=antx
-##                enemigo.y=anty
-##            elif direccionEnemigo=="abajo" and "derecha":
-##                enemigo.x=antx
-##                enemigo.y=anty
-##            elif direccionEnemigo=="abajo" and "izquierda":
-##                enemigo.x=antx
-##                enemigo.y=anty
 
-            if direccionEnemigo=="derecha":
+            if moverseDer==True and moverseArriba==True:
+                moverseDer==False
+                enemigo.x=antx 
+                if enemigo.colliderect(muro):
+                    moverseArriba==False
+                    enemigo.y=anty
+                    moverseDer==True
+                    enemigo.x+=1
+                    if enemigo.colliderect(muro):
+                        moverseDer==False
+                        enemigo.x=antx
+                    
+            elif moverseDer==True and moverseAbajo==True:
+                moverseDer==False
                 enemigo.x=antx
-
-            if direccionEnemigo=="izquierda":
+                if enemigo.colliderect(muro):
+                    moverseAbajo==False
+                    enemigo.y=anty
+                    moverseDer==True
+                    enemigo.x+=1
+                    if enemigo.colliderect(muro):
+                        moverseDer==False
+                        enemigo.x=antx
+            elif moverseizq==True and moverseAbajo==True:
+                moverseizq==False
                 enemigo.x=antx
+                if enemigo.colliderect(muro):
+                    moverseAbajo==False
+                    enemigo.y=anty
+                    moverseizq==True
+                    enemigo.x-=1
+                    if enemigo.colliderect(muro):
+                        moverseizq==False
+                        enemigo.x=antx
+            elif moverseizq==True and moverseArriba==True:
+                moverseizq==False
+                enemigo.x=antx
+                if enemigo.colliderect(muro):
+                    moverseArriba==False
+                    enemigo.y=anty
+                    moverseizq==True
+                    enemigo.x-=1
+                    if enemigo.colliderect(muro):
+                        moverseizq==False
+                        enemigo.x=antx
 
-            if direccionEnemigo=="arriba":
-                enemigo.y=anty
-            if direccionEnemigo=="abajo":
-                enemigo.y=anty
-
+##            elif moverseDer==True:
+##                moverseDer==False
+##                enemigo.x=antx   
+##            elif moverseizq==True:
+##                moverseizq=False
+##                enemigo.x=antx
+##            elif moverseArriba==True:
+##                moverseArriba=False
+##                enemigo.y=anty
+##            elif moverseAbajo==True:
+##                moverseAbajo=False
+##                enemigo.y=anty
+            
     anty=enemigo.y
     antx=enemigo.x
 
-    oldx = personaje.x
+    oldx = personaje.x 
     oldy = personaje.y
     
     
