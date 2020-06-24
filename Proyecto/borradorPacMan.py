@@ -47,7 +47,8 @@ def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
 
 def dibujar_pildoras(superficie, rectangulo):
-    pygame.draw.rect(superficie, VERDE, rectangulo)
+    for recs in listapildoras:
+        pygame.draw.rect(ventana,VERDE, recs)
     
 def dibujar_enemigo(superficie, rectangulo):
     pygame.draw.rect(superficie, ROJO, rectangulo)
@@ -68,6 +69,7 @@ def construir_mapa(mapa):
 def dibujar_mapa(superficie, muros):
     for muro in muros:
         dibujar_muro(superficie,muro)
+    
 
 #Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
@@ -79,11 +81,13 @@ direccion=""
 
 personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 listapildoras = []
+pildorasConsumidas=0
 x=0
 for i in range (30):
     y=50
     x=x+40
     listapildoras.append(pygame.Rect(x,y,15,15))
+
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 #con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
@@ -279,19 +283,6 @@ while jugando:
                     if enemigo.colliderect(muro):
                         moverseizq==False
                         enemigo.x=antx
-
-##            elif moverseDer==True:
-##                moverseDer==False
-##                enemigo.x=antx   
-##            elif moverseizq==True:
-##                moverseizq=False
-##                enemigo.x=antx
-##            elif moverseArriba==True:
-##                moverseArriba=False
-##                enemigo.y=anty
-##            elif moverseAbajo==True:
-##                moverseAbajo=False
-##                enemigo.y=anty
             
     anty=enemigo.y
     antx=enemigo.x
@@ -299,17 +290,26 @@ while jugando:
     oldx = personaje.x 
     oldy = personaje.y
     
+
     for recs in listapildoras:
-        pygame.draw.rect(ventana,VERDE, recs)
-    for recs in listapildoras:
-                if personaje.colliderect(recs):
-                    recs.width=0
-                    recs.height=0
-    #dibujos
+        if personaje.colliderect(recs):
+            if recs.width>0:
+                pildorasConsumidas=pildorasConsumidas+1
+                print("Pildoras Consumidas: ", pildorasConsumidas)
+            recs.width=0
+            recs.height=0
+            
+            
+    if personaje.colliderect(enemigo):
+        print("Perdiste")
+        print("Pildoras Consumidas: ", pildorasConsumidas)
+        jugando=False
+
     
+    #dibujos
     dibujar_mapa(ventana, muros)
     dibujar_personaje(ventana,personaje)
-#    dibujar_pildoras(ventana,pildoras)
+    dibujar_pildoras(ventana,listapildoras)
     dibujar_enemigo(ventana,enemigo)
     #Actualizar
     pygame.display.update()
