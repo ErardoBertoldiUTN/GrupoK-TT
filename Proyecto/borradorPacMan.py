@@ -69,8 +69,116 @@ def construir_mapa(mapa):
 def dibujar_mapa(superficie, muros):
     for muro in muros:
         dibujar_muro(superficie,muro)
-    
-
+def movimientoEnemigo(enemigo):
+    if enemigo.x>personaje.x:         
+        enemigo.x-=1
+        moverseizq=True
+    if enemigo.x<personaje.x:
+        enemigo.x+=1
+        moverseDer=True
+    if enemigo.y>personaje.y:
+        enemigo.y-=1
+        moverseArriba=True
+    if enemigo.y<personaje.y:
+        enemigo.y+=1
+        moverseAbajo=True
+    return enemigo
+def colisionEnemigo(enemigo):
+    if enemigo.colliderect(muro):
+        if moverseDer==True and moverseArriba==True:
+            moverseDer==False
+            enemigo.x=antx 
+            if enemigo.colliderect(muro):
+                moverseArriba==False
+                enemigo.y=anty
+                moverseDer==True
+                enemigo.x+=1
+                if enemigo.colliderect(muro):
+                    moverseDer==False
+                    enemigo.x=antx
+                
+        elif moverseDer==True and moverseAbajo==True:
+            moverseDer==False
+            enemigo.x=antx
+            if enemigo.colliderect(muro):
+                moverseAbajo==False
+                enemigo.y=anty
+                moverseDer==True
+                enemigo.x+=1
+                if enemigo.colliderect(muro):
+                    moverseDer==False
+                    enemigo.x=antx
+        elif moverseizq==True and moverseAbajo==True:
+            moverseizq==False
+            enemigo.x=antx
+            if enemigo.colliderect(muro):
+                moverseAbajo==False
+                enemigo.y=anty
+                moverseizq==True
+                enemigo.x-=1
+                if enemigo.colliderect(muro):
+                    moverseizq==False
+                    enemigo.x=antx
+        elif moverseizq==True and moverseArriba==True:
+            moverseizq==False
+            enemigo.x=antx
+            if enemigo.colliderect(muro):
+                moverseArriba==False
+                enemigo.y=anty
+                moverseizq==True
+                enemigo.x-=1
+                if enemigo.colliderect(muro):
+                    moverseizq==False
+                    enemigo.x=antx
+    return enemigo
+def colisionEnemigo2(enemigo2):
+    if enemigo2.colliderect(muro):
+        if moverseDer==True and moverseArriba==True:
+            moverseDer==False
+            enemigo2.x=antx2 
+            if enemigo2.colliderect(muro):
+                moverseArriba==False
+                enemigo2.y=anty2
+                moverseDer==True
+                enemigo2.x+=1
+                if enemigo.colliderect(muro):
+                    moverseDer==False
+                    enemigo2.x=antx2
+                
+        elif moverseDer==True and moverseAbajo==True:
+            moverseDer==False
+            enemigo2.x=antx2
+            if enemigo.colliderect(muro):
+                moverseAbajo==False
+                enemigo2.y=anty2
+                moverseDer==True
+                enemigo2.x+=1
+                if enemigo.colliderect(muro):
+                    moverseDer==False
+                    enemigo2.x=antx2
+        elif moverseizq==True and moverseAbajo==True:
+            moverseizq==False
+            enemigo2.x=antx2
+            if enemigo.colliderect(muro):
+                moverseAbajo==False
+                enemigo2.y=anty2
+                moverseizq==True
+                enemigo2.x-=1
+                if enemigo.colliderect(muro):
+                    moverseizq==False
+                    enemigo2.x=antx2
+        elif moverseizq==True and moverseArriba==True:
+            moverseizq==False
+            enemigo2.x=antx2
+            if enemigo.colliderect(muro):
+                moverseArriba==False
+                enemigo2.y=anty2
+                moverseizq==True
+                enemigo2.x-=1
+                if enemigo.colliderect(muro):
+                    moverseizq==False
+                    enemigo2.x=antx2
+    return enemigo2
 #Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
@@ -93,6 +201,7 @@ velocidad=10                         #constante para controlar la velocidad de m
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
 WASD = [False, False, False, False]
 enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
+enemigo2=pygame.Rect(40,200,30,30)
 moverseizq=True
 moverseDer=True
 moverseArriba=True
@@ -100,7 +209,6 @@ moverseAbajo=True
 #bucle ppal
 jugando = True
 while jugando:
-    
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
     
@@ -160,21 +268,10 @@ while jugando:
         personaje.x+=velocidad
 
 
-
 #con los siguientes if logro hacer que el enemigo me persiga
-
-    if enemigo.x>personaje.x:         
-        enemigo.x-=1
-        moverseizq=True
-    if enemigo.x<personaje.x:
-        enemigo.x+=1
-        moverseDer=True
-    if enemigo.y>personaje.y:
-        enemigo.y-=1
-        moverseArriba=True
-    if enemigo.y<personaje.y:
-        enemigo.y+=1
-        moverseAbajo=True
+    enemigo2=movimientoEnemigo(enemigo2)
+    enemigo=movimientoEnemigo(enemigo)
+    
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
 #el personaje atravesaba el muro y aparecía en cualquier lado
@@ -235,58 +332,14 @@ while jugando:
             personaje.x=oldx
             personaje.y=oldy
 
+        enemigo2=colisionEnemigo2(enemigo2)
 
-        if enemigo.colliderect(muro):
-
-            if moverseDer==True and moverseArriba==True:
-                moverseDer==False
-                enemigo.x=antx 
-                if enemigo.colliderect(muro):
-                    moverseArriba==False
-                    enemigo.y=anty
-                    moverseDer==True
-                    enemigo.x+=1
-                    if enemigo.colliderect(muro):
-                        moverseDer==False
-                        enemigo.x=antx
-                    
-            elif moverseDer==True and moverseAbajo==True:
-                moverseDer==False
-                enemigo.x=antx
-                if enemigo.colliderect(muro):
-                    moverseAbajo==False
-                    enemigo.y=anty
-                    moverseDer==True
-                    enemigo.x+=1
-                    if enemigo.colliderect(muro):
-                        moverseDer==False
-                        enemigo.x=antx
-            elif moverseizq==True and moverseAbajo==True:
-                moverseizq==False
-                enemigo.x=antx
-                if enemigo.colliderect(muro):
-                    moverseAbajo==False
-                    enemigo.y=anty
-                    moverseizq==True
-                    enemigo.x-=1
-                    if enemigo.colliderect(muro):
-                        moverseizq==False
-                        enemigo.x=antx
-            elif moverseizq==True and moverseArriba==True:
-                moverseizq==False
-                enemigo.x=antx
-                if enemigo.colliderect(muro):
-                    moverseArriba==False
-                    enemigo.y=anty
-                    moverseizq==True
-                    enemigo.x-=1
-                    if enemigo.colliderect(muro):
-                        moverseizq==False
-                        enemigo.x=antx
+        enemigo=colisionEnemigo(enemigo)
             
     anty=enemigo.y
     antx=enemigo.x
-
+    antx2=enemigo2.x
+    anty2=enemigo2.y
     oldx = personaje.x 
     oldy = personaje.y
     
@@ -299,7 +352,7 @@ while jugando:
             recs.width=0
             recs.height=0
             
-            
+
     if personaje.colliderect(enemigo):
         print("Perdiste")
         print("Pildoras Consumidas: ", pildorasConsumidas)
@@ -311,6 +364,7 @@ while jugando:
     dibujar_personaje(ventana,personaje)
     dibujar_pildoras(ventana,listapildoras)
     dibujar_enemigo(ventana,enemigo)
+    dibujar_enemigo(ventana,enemigo2)
     #Actualizar
     pygame.display.update()
 
