@@ -2,6 +2,7 @@
 #movimiento de enemigo corregido funcionando bien!!
 import os
 import pygame
+
 from pygame import Rect
 #inicializar
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
@@ -17,6 +18,7 @@ AZUL=(0,0,255)
 VERDE=(0,255,0)
 MARRON=(150,70,10)
 ROJO=(255,0,0)
+AMARILLO=(255,255,0)
 #Mapas
 #1270/40=32 baldosas a lo ancho
 #640/40=16 baldosas a lo largo
@@ -45,7 +47,8 @@ def dibujar_muro(superficie, rectangulo):
 
 def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
-
+def dibujar_personaje2(superficie, rectangulo):
+    pygame.draw.rect(superficie, AMARILLO, rectangulo)
 def dibujar_pildoras(superficie, rectangulo):
     for recs in listapildoras:
         pygame.draw.rect(ventana,VERDE, recs)
@@ -179,7 +182,7 @@ def colisionEnemigo2(enemigo2):
                     moverseizq==False
                     enemigo2.x=antx2
     return enemigo2
-#Ventana
+##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
 
@@ -188,6 +191,7 @@ muros=construir_mapa(mapa)
 direccion=""
 
 personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
+personaje2=pygame.Rect(40,560,30,30)
 listapildoras = []
 pildorasConsumidas=0
 x=0
@@ -200,6 +204,7 @@ velocidad=10                         #constante para controlar la velocidad de m
 #con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
 WASD = [False, False, False, False]
+WASD2 = [False, False, False, False]
 enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
 enemigo2=pygame.Rect(40,200,30,30)
 moverseizq=True
@@ -216,7 +221,8 @@ while jugando:
         
             pygame.quit()
         
-        if event.type == pygame.KEYDOWN: 
+        if event.type == pygame.KEYDOWN:
+
             if event.key==pygame.K_ESCAPE:
                 jugando= False
             
@@ -236,37 +242,60 @@ while jugando:
             
                 WASD[3] = True
                 direccion="derecha"
-        if event.type == pygame.KEYUP:
-            
-            if event.key == pygame.K_w:  
-            
-                WASD[0] = False
-            
-            if event.key == pygame.K_s:
-            
-                WASD[2] = False
-            
-            if event.key == pygame.K_a:
-            
-                WASD[1] = False
-                    
-            if event.key == pygame.K_d:
                 
+            if event.key==pygame.K_UP:
+                WASD2[0] = True
+                direccion2="arriba"
+            if event.key==pygame.K_DOWN:
+                WASD2[2] = True
+                direccion2="abajo"
+            if event.key==pygame.K_LEFT:
+                WASD2[1] = True
+                direccion2="izquierda"
+            if event.key==pygame.K_RIGHT:
+                WASD2[3] = True
+                direccion2="derecha"
+
+                
+        if event.type == pygame.KEYUP:                
+            if event.key == pygame.K_w:  
+                WASD[0] = False
+            if event.key == pygame.K_s:       
+                WASD[2] = False            
+            if event.key == pygame.K_a:            
+                WASD[1] = False                    
+            if event.key == pygame.K_d:                
                 WASD[3] = False
+                
+            if event.key==pygame.K_UP:
+                WASD2[0] = False                
+            if event.key==pygame.K_DOWN:
+                WASD2[2] = False                
+            if event.key==pygame.K_LEFT:
+                WASD2[1] = False
+            if event.key==pygame.K_RIGHT:
+                WASD2[3] = False
+                
+
     reloj.tick(60)
     ventana.fill(NEGRO)
     if WASD[0]:
-        personaje.y-=velocidad
-    
+        personaje.y-=velocidad  
     if WASD[1]:
         personaje.x-=velocidad
-        
     if WASD[2]:
         personaje.y+=velocidad
-        
     if WASD[3]:
         personaje.x+=velocidad
 
+    if WASD2[0]:
+        personaje2.y-=velocidad  
+    if WASD2[1]:
+        personaje2.x-=velocidad
+    if WASD2[2]:
+        personaje2.y+=velocidad
+    if WASD2[3]:
+        personaje2.x+=velocidad
 
 #con los siguientes if logro hacer que el enemigo me persiga
     enemigo2=movimientoEnemigo(enemigo2)
@@ -333,9 +362,8 @@ while jugando:
             personaje.y=oldy
 
         enemigo2=colisionEnemigo2(enemigo2)
-
         enemigo=colisionEnemigo(enemigo)
-            
+             
     anty=enemigo.y
     antx=enemigo.x
     antx2=enemigo2.x
@@ -352,8 +380,8 @@ while jugando:
             recs.width=0
             recs.height=0
             
-
-    if personaje.colliderect(enemigo):
+    
+    if personaje.colliderect(enemigo) or personaje.colliderect(enemigo2):
         print("Perdiste")
         print("Pildoras Consumidas: ", pildorasConsumidas)
         jugando=False
@@ -362,6 +390,7 @@ while jugando:
     #dibujos
     dibujar_mapa(ventana, muros)
     dibujar_personaje(ventana,personaje)
+    dibujar_personaje2(ventana,personaje2)
     dibujar_pildoras(ventana,listapildoras)
     dibujar_enemigo(ventana,enemigo)
     dibujar_enemigo(ventana,enemigo2)
