@@ -1,5 +1,5 @@
-#ya se logró el movimiento continuo, cambié las teclas de movimiento por letras porq son más cómodas de usar en el teclado de las flechas
-#movimiento de enemigo corregido funcionando bien!!
+#JUGADOR AZUL JUEGA CON TECLAS AWSD, JUGADOR AMARILLO JUEGA CON LAS FLECHAS
+
 import os
 import pygame
 
@@ -189,7 +189,7 @@ reloj=pygame.time.Clock()
 #datos
 muros=construir_mapa(mapa)
 direccion=""
-
+direccion2=""
 personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 personaje2=pygame.Rect(40,560,30,30)
 listapildoras = []
@@ -305,7 +305,7 @@ while jugando:
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
 #el personaje atravesaba el muro y aparecía en cualquier lado
     for muro in muros:
-        if personaje.colliderect(muro):
+        if personaje.colliderect(muro):   ##JUGADOR 1
             if direccion=="abajo" and direccion=="derecha":
                 WASD[2]=False
                 WASD[3]=False
@@ -360,7 +360,62 @@ while jugando:
                         WASD[2]=False 
             personaje.x=oldx
             personaje.y=oldy
+            
+        if personaje2.colliderect(muro):     ### JUGADOR 2
+            if direccion2=="abajo" and direccion2=="derecha":
+                WASD2[2]=False
+                WASD2[3]=False
+            elif direccion2=="abajo" and direccion2=="izquierda":
+                WASD2[2]=False
+                WASD2[1]=False
+            elif direccion2=="arriba" and direccion2=="derecha":
+                WASD2[0]=False
+                WASD2[3]=False
+            elif direccion2=="arriba" and direccion2=="izquierda":
+                WASD2[0]=False
+                WASD2[1]=False
+            elif direccion2=="abajo":
+#                personaje.x=oldx
+                WASD2[2]=False
+                if direccion2=="derecha":
+                    if personaje2.colliderect(muro):
+                        WASD2[3]=False
+                        
+                if direccion2=="izquierda":
+                    if personaje2.colliderect(muro):
+                        WASD2[1]=False 
+                        
+            elif direccion2=="arriba":
+#                personaje.x=oldx
+                WASD2[0]=False
+                if direccion2=="derecha":
+                    if personaje2.colliderect(muro):
+                        WASD2[3]=False
+                if direccion2=="izquierda":
+                    if personaje2.colliderect(muro):
+                        WASD2[1]=False 
 
+            elif direccion2=="derecha":
+#                personaje.y=oldy
+                WASD2[3]=False
+                if direccion2=="arriba":
+                    if personaje2.colliderect(muro):
+                        WASD2[0]=False
+                if direccion2=="abajo":
+                    if personaje2.colliderect(muro):
+                        WASD2[2]=False 
+                
+            elif direccion2=="izquierda":
+#                personaje.y=oldy
+                WASD2[1]=False
+                if direccion2=="arriba":
+                    if personaje2.colliderect(muro):
+                        WASD2[0]=False
+                if direccion2=="abajo":
+                    if personaje2.colliderect(muro):
+                        WASD2[2]=False 
+            personaje2.x=oldx2
+            personaje2.y=oldy2
         enemigo2=colisionEnemigo2(enemigo2)
         enemigo=colisionEnemigo(enemigo)
              
@@ -370,7 +425,8 @@ while jugando:
     anty2=enemigo2.y
     oldx = personaje.x 
     oldy = personaje.y
-    
+    oldx2 = personaje2.x 
+    oldy2 = personaje2.y    
 
     for recs in listapildoras:
         if personaje.colliderect(recs):
