@@ -27,17 +27,17 @@ CELESTE=(0,255,255)
 mapa=[  #las X me representan las baldosas
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "X                              X",
-    "X     XXXXXXXXXXXXXXXXXXXX  X  X",
+    "X     XXXX XXXXX XXXX XXXX  X  X",
     "X                           X  X",
     "X         XXX  XXXXXX  XXX     X",
-    "X   X                      X   X",
-    "X    X       XXXXXXXXXXXX  X   X",
-    "X     X                    X   X",
-    "X      X     XXXXXXXXXX        X",
+    "X    X                     X   X",
+    "X    X   X   XXXX XXX XXX  X   X",
+    "X    X   X                 X   X",
+    "X    X   X   XXXX XXX XX       X",
     "X                              X",
-    "X   X  XXXXXXXXXXXXXXXXXXXX    X",
+    "X   X  XXXX XXXXX XXXX XXXX    X",
     "X   X                          X",
-    "X   X  XXXXXXXXXXXXXXXXXXXX    X",
+    "X   X  XXX XXX XXX XXX XXXX    X",
     "X   X                          X",
     "X                              X",
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
@@ -85,8 +85,36 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
     dist2Y=enemigo.y-personaje2.y              #Luego en los if comparo distancias, el jugador que esté mas cerca será perseguido por el enemigo 
     distancia1=([pow(distX,2)+pow(distY,2)])  #distancia del jugador azul respecdto al enemigo
     distancia2=([pow(dist2X,2)+pow(dist2Y,2)])#distancia del jugador amarillo respecto al enemigo
-
-    if(distancia1<distancia2):
+    if perdioAzul==False and perdioAmarillo==False:
+        if(distancia1<distancia2):
+            if enemigo.x>personaje.x:         
+                enemigo.x-=1
+                moverseizq=True
+            if enemigo.x<personaje.x:
+                enemigo.x+=1
+                moverseDer=True
+            if enemigo.y>personaje.y:
+                enemigo.y-=1
+                moverseArriba=True
+            if enemigo.y<personaje.y:
+                enemigo.y+=1
+                moverseAbajo=True
+#        return enemigo
+#    if perdioAmarillo==False:
+        if(distancia1>distancia2):
+            if enemigo.x>personaje2.x:         
+                enemigo.x-=1
+                moverseizq=True
+            if enemigo.x<personaje2.x:
+                enemigo.x+=1
+                moverseDer=True
+            if enemigo.y>personaje2.y:
+                enemigo.y-=1
+                moverseArriba=True
+            if enemigo.y<personaje2.y:
+                enemigo.y+=1
+                moverseAbajo=True
+    if perdioAmarillo==True:
         if enemigo.x>personaje.x:         
             enemigo.x-=1
             moverseizq=True
@@ -99,8 +127,7 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
         if enemigo.y<personaje.y:
             enemigo.y+=1
             moverseAbajo=True
-#        return enemigo
-    if(distancia1>distancia2):
+    if perdioAzul==True:
         if enemigo.x>personaje2.x:         
             enemigo.x-=1
             moverseizq=True
@@ -113,7 +140,7 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
         if enemigo.y<personaje2.y:
             enemigo.y+=1
             moverseAbajo=True
-#        return enemigo
+
 def colisionEnemigo(enemigo, i):
     if enemigo.colliderect(muro):
         if moverseDer==True and moverseArriba==True:
@@ -127,7 +154,7 @@ def colisionEnemigo(enemigo, i):
                 if enemigo.colliderect(muro):
                     moverseDer==False
                     enemigo.x=antx[i] 
-                
+                    
         elif moverseDer==True and moverseAbajo==True:
             moverseDer==False
             enemigo.x=antx[i] 
@@ -138,7 +165,8 @@ def colisionEnemigo(enemigo, i):
                 enemigo.x+=1
                 if enemigo.colliderect(muro):
                     moverseDer==False
-                    enemigo.x=antx[i] 
+                    enemigo.x=antx[i]
+                    
         elif moverseizq==True and moverseAbajo==True:
             moverseizq==False
             enemigo.x=antx[i] 
@@ -160,7 +188,33 @@ def colisionEnemigo(enemigo, i):
                 enemigo.x-=1
                 if enemigo.colliderect(muro):
                     moverseizq==False
-                    enemigo.x=antx[i] 
+                    enemigo.x=antx[i]
+##        elif moverseAbajo==True and moverseizq==True:
+##            moverseAbajo==False
+##            enemigo.y=anty[i]
+##        #    enemigo.x-=1
+##            if enemigo.colliderect(muro):
+##                moverseizq==False
+##                enemigo.x=antx[i]
+##                enemigo.y+=1
+##                moverseAbajo==True
+##                
+##                if enemigo.colliderect(muro):
+##                    moverseAbajo==False
+##                    enemigo.y=anty[i] 
+##        elif moverseArriba==True and moverseizq==True:
+##            moverseArriba==False
+##            enemigo.y=anty[i]
+##         #   enemigo.x-=1
+##            if enemigo.colliderect(muro):
+##                moverseizq==False
+##                enemigo.x=antx[i]
+##                enemigo.y-=1
+##                moverseArriba==True
+##                
+##                if enemigo.colliderect(muro):
+##                    moverseArriba==False
+##                    enemigo.y=anty[i] 
 #    return enemigo
 
 ##Ventana
@@ -173,6 +227,8 @@ direccion=""
 direccion2=""
 personaje= pygame.Rect(1210,570,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 personaje2=pygame.Rect(1210,40,30,30)
+perdioAzul=False
+perdioAmarillo=False
 listapildoras = []
 pildorasConsumidas=[0,0]
 x=0
@@ -293,7 +349,7 @@ while jugando:
     
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
-#el personaje atravesaba el muro y aparecía en cualquier lado
+#el personaje atravesaba el muro y aparecía en cualquier lado, ya está corregido
     for muro in muros:
         if personaje.colliderect(muro):   ##JUGADOR 1
             if direccion=="abajo" and direccion=="derecha":
@@ -423,16 +479,26 @@ while jugando:
                 print("Pildoras Consumidas jugador AMARILLO: ", pildorasConsumidas[1])
             recs.width=0
             recs.height=0   
-    
-    if personaje.colliderect(enemigo[0]) or personaje.colliderect(enemigo[1]):
-        print("Perdiste")
-        print("Pildoras Consumidas: ", pildorasConsumidas)
-        jugando=False
-    
+    for i in range (e):
+        if personaje.colliderect(enemigo[i]):
+            print("Perdiste JUGADOR AZUL")
+            print("Pildoras Consumidas: ", pildorasConsumidas[0])
+            personaje=pygame.Rect(0,0,0,0)
+            perdioAzul=True
+        if personaje2.colliderect(enemigo[i]):
+            print("Perdiste JUGADOR AMARILLO")
+            print("Pildoras Consumidas: ", pildorasConsumidas[1])
+            personaje2=pygame.Rect(0,0,0,0)
+            perdioAmarillo=True            
+    if perdioAmarillo==True and perdioAzul==True:
+        jugando==False
+        break
     #dibujos
     dibujar_mapa(ventana, muros)
-    dibujar_personaje(ventana,personaje)
-    dibujar_personaje2(ventana,personaje2)
+    if perdioAzul==False:
+        dibujar_personaje(ventana,personaje)
+    if perdioAmarillo==False:
+        dibujar_personaje2(ventana,personaje2)
     dibujar_pildoras(ventana,listapildoras)
     for i in range (e):
         dibujar_enemigo(ventana,enemigo[i])
