@@ -148,7 +148,7 @@ direccion2=""
 personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 personaje2=pygame.Rect(40,560,30,30)
 listapildoras = []
-pildorasConsumidas=0
+pildorasConsumidas=[0,0]
 x=0
 for i in range (30):
     y=50
@@ -160,10 +160,19 @@ velocidad=10                         #constante para controlar la velocidad de m
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
 WASD = [False, False, False, False]
 WASD2 = [False, False, False, False]
-enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
-enemigo2=pygame.Rect(40,200,30,30)
-antx=[0,0]  # listas que guardan las posiciones de los enemigos
-anty=[0,0]
+##enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
+##enemigo2=pygame.Rect(40,200,30,30)
+enemigo=[]
+antx=[0,0,0,0,0]  # listas que guardan las posiciones de los enemigos
+anty=[0,0,0,0,0]
+e=5 #cantidad de enemigos
+x=0
+y=0
+for i in range (e):
+    x=x+80
+    y=y+50
+    enemigo.append(pygame.Rect(x,y,30,30))
+
 moverseizq=True
 moverseDer=True
 moverseArriba=True
@@ -254,9 +263,9 @@ while jugando:
     if WASD2[3]:
         personaje2.x+=velocidad
 
-
-    enemigo2=movimientoEnemigo(enemigo2)
-    enemigo=movimientoEnemigo(enemigo)
+    for i in range (e):
+        enemigo[i]=movimientoEnemigo(enemigo[i])
+#    enemigo[1]=movimientoEnemigo(enemigo[1])
     
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
@@ -373,13 +382,15 @@ while jugando:
                         WASD2[2]=False 
             personaje2.x=oldx2
             personaje2.y=oldy2
-        enemigo2=colisionEnemigo(enemigo2,1)
-        enemigo=colisionEnemigo(enemigo,0)
-             
-    anty[0]=enemigo.y
-    antx[0]=enemigo.x
-    antx[1]=enemigo2.x
-    anty[1]=enemigo2.y
+        for i in range (e):    
+            enemigo[i]=colisionEnemigo(enemigo[i],i)
+#            enemigo[0]=colisionEnemigo(enemigo[0],0)
+
+    for i in range (e):         
+        anty[i]=enemigo[i].y
+        antx[i]=enemigo[i].x
+##        antx[1]=enemigo[1].x
+##        anty[1]=enemigo[1].y
     oldx = personaje.x 
     oldy = personaje.y
     oldx2 = personaje2.x 
@@ -388,13 +399,18 @@ while jugando:
     for recs in listapildoras:
         if personaje.colliderect(recs):
             if recs.width>0:
-                pildorasConsumidas=pildorasConsumidas+1
-                print("Pildoras Consumidas: ", pildorasConsumidas)
+                pildorasConsumidas[0]=pildorasConsumidas[0]+1
+                print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
             recs.width=0
             recs.height=0
-            
+        if personaje2.colliderect(recs):
+            if recs.width>0:
+                pildorasConsumidas[1]=pildorasConsumidas[1]+1
+                print("Pildoras Consumidas jugador AMARILLO: ", pildorasConsumidas[1])
+            recs.width=0
+            recs.height=0   
     
-    if personaje.colliderect(enemigo) or personaje.colliderect(enemigo2):
+    if personaje.colliderect(enemigo[0]) or personaje.colliderect(enemigo[1]):
         print("Perdiste")
         print("Pildoras Consumidas: ", pildorasConsumidas)
         jugando=False
@@ -405,8 +421,9 @@ while jugando:
     dibujar_personaje(ventana,personaje)
     dibujar_personaje2(ventana,personaje2)
     dibujar_pildoras(ventana,listapildoras)
-    dibujar_enemigo(ventana,enemigo)
-    dibujar_enemigo(ventana,enemigo2)
+    for i in range (e):
+        dibujar_enemigo(ventana,enemigo[i])
+    #dibujar_enemigo(ventana,enemigo[1])
     #Actualizar
     pygame.display.update()
 
