@@ -19,6 +19,8 @@ VERDE=(0,255,0)
 MARRON=(150,70,10)
 ROJO=(255,0,0)
 AMARILLO=(255,255,0)
+BLANCO=(255,255,255)
+CELESTE=(0,255,255)
 #Mapas
 #1270/40=32 baldosas a lo ancho
 #640/40=16 baldosas a lo largo
@@ -72,7 +74,7 @@ def construir_mapa(mapa):
 def dibujar_mapa(superficie, muros):
     for muro in muros:
         dibujar_muro(superficie,muro)
-def movimientoEnemigo(enemigo):
+def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enemigos me persiga
     if enemigo.x>personaje.x:         
         enemigo.x-=1
         moverseizq=True
@@ -86,102 +88,55 @@ def movimientoEnemigo(enemigo):
         enemigo.y+=1
         moverseAbajo=True
     return enemigo
-def colisionEnemigo(enemigo):
+def colisionEnemigo(enemigo, i):
     if enemigo.colliderect(muro):
         if moverseDer==True and moverseArriba==True:
             moverseDer==False
-            enemigo.x=antx 
+            enemigo.x=antx[i] 
             if enemigo.colliderect(muro):
                 moverseArriba==False
-                enemigo.y=anty
+                enemigo.y=anty[i] 
                 moverseDer==True
                 enemigo.x+=1
                 if enemigo.colliderect(muro):
                     moverseDer==False
-                    enemigo.x=antx
+                    enemigo.x=antx[i] 
                 
         elif moverseDer==True and moverseAbajo==True:
             moverseDer==False
-            enemigo.x=antx
+            enemigo.x=antx[i] 
             if enemigo.colliderect(muro):
                 moverseAbajo==False
-                enemigo.y=anty
+                enemigo.y=anty[i] 
                 moverseDer==True
                 enemigo.x+=1
                 if enemigo.colliderect(muro):
                     moverseDer==False
-                    enemigo.x=antx
+                    enemigo.x=antx[i] 
         elif moverseizq==True and moverseAbajo==True:
             moverseizq==False
-            enemigo.x=antx
+            enemigo.x=antx[i] 
             if enemigo.colliderect(muro):
                 moverseAbajo==False
-                enemigo.y=anty
+                enemigo.y=anty[i] 
                 moverseizq==True
                 enemigo.x-=1
                 if enemigo.colliderect(muro):
                     moverseizq==False
-                    enemigo.x=antx
+                    enemigo.x=antx[i] 
         elif moverseizq==True and moverseArriba==True:
             moverseizq==False
-            enemigo.x=antx
+            enemigo.x=antx[i] 
             if enemigo.colliderect(muro):
                 moverseArriba==False
-                enemigo.y=anty
+                enemigo.y=anty[i] 
                 moverseizq==True
                 enemigo.x-=1
                 if enemigo.colliderect(muro):
                     moverseizq==False
-                    enemigo.x=antx
+                    enemigo.x=antx[i] 
     return enemigo
-def colisionEnemigo2(enemigo2):
-    if enemigo2.colliderect(muro):
-        if moverseDer==True and moverseArriba==True:
-            moverseDer==False
-            enemigo2.x=antx2 
-            if enemigo2.colliderect(muro):
-                moverseArriba==False
-                enemigo2.y=anty2
-                moverseDer==True
-                enemigo2.x+=1
-                if enemigo.colliderect(muro):
-                    moverseDer==False
-                    enemigo2.x=antx2
-                
-        elif moverseDer==True and moverseAbajo==True:
-            moverseDer==False
-            enemigo2.x=antx2
-            if enemigo.colliderect(muro):
-                moverseAbajo==False
-                enemigo2.y=anty2
-                moverseDer==True
-                enemigo2.x+=1
-                if enemigo.colliderect(muro):
-                    moverseDer==False
-                    enemigo2.x=antx2
-        elif moverseizq==True and moverseAbajo==True:
-            moverseizq==False
-            enemigo2.x=antx2
-            if enemigo.colliderect(muro):
-                moverseAbajo==False
-                enemigo2.y=anty2
-                moverseizq==True
-                enemigo2.x-=1
-                if enemigo.colliderect(muro):
-                    moverseizq==False
-                    enemigo2.x=antx2
-        elif moverseizq==True and moverseArriba==True:
-            moverseizq==False
-            enemigo2.x=antx2
-            if enemigo.colliderect(muro):
-                moverseArriba==False
-                enemigo2.y=anty2
-                moverseizq==True
-                enemigo2.x-=1
-                if enemigo.colliderect(muro):
-                    moverseizq==False
-                    enemigo2.x=antx2
-    return enemigo2
+
 ##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
@@ -207,6 +162,8 @@ WASD = [False, False, False, False]
 WASD2 = [False, False, False, False]
 enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
 enemigo2=pygame.Rect(40,200,30,30)
+antx=[0,0]  # listas que guardan las posiciones de los enemigos
+anty=[0,0]
 moverseizq=True
 moverseDer=True
 moverseArriba=True
@@ -297,7 +254,7 @@ while jugando:
     if WASD2[3]:
         personaje2.x+=velocidad
 
-#con los siguientes if logro hacer que el enemigo me persiga
+
     enemigo2=movimientoEnemigo(enemigo2)
     enemigo=movimientoEnemigo(enemigo)
     
@@ -416,13 +373,13 @@ while jugando:
                         WASD2[2]=False 
             personaje2.x=oldx2
             personaje2.y=oldy2
-        enemigo2=colisionEnemigo2(enemigo2)
-        enemigo=colisionEnemigo(enemigo)
+        enemigo2=colisionEnemigo(enemigo2,1)
+        enemigo=colisionEnemigo(enemigo,0)
              
-    anty=enemigo.y
-    antx=enemigo.x
-    antx2=enemigo2.x
-    anty2=enemigo2.y
+    anty[0]=enemigo.y
+    antx[0]=enemigo.x
+    antx[1]=enemigo2.x
+    anty[1]=enemigo2.y
     oldx = personaje.x 
     oldy = personaje.y
     oldx2 = personaje2.x 
