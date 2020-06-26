@@ -2,7 +2,7 @@
 
 import os
 import pygame
-
+import math
 from pygame import Rect
 #inicializar
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
@@ -24,7 +24,7 @@ CELESTE=(0,255,255)
 #Mapas
 #1270/40=32 baldosas a lo ancho
 #640/40=16 baldosas a lo largo
-mapa=[
+mapa=[  #las X me representan las baldosas
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "X                              X",
     "X     XXXXXXXXXXXXXXXXXXXX  X  X",
@@ -74,20 +74,46 @@ def construir_mapa(mapa):
 def dibujar_mapa(superficie, muros):
     for muro in muros:
         dibujar_muro(superficie,muro)
-def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enemigos me persiga
-    if enemigo.x>personaje.x:         
-        enemigo.x-=1
-        moverseizq=True
-    if enemigo.x<personaje.x:
-        enemigo.x+=1
-        moverseDer=True
-    if enemigo.y>personaje.y:
-        enemigo.y-=1
-        moverseArriba=True
-    if enemigo.y<personaje.y:
-        enemigo.y+=1
-        moverseAbajo=True
-    return enemigo
+def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enemigos me persigan
+    distancia1=0
+    distancia2=0
+    distX=0
+    distY=0                                    #A continuación utilizaremos pitagoras para comparar distancias entre jugadores y enemigos
+    distX=enemigo.x-personaje.x                #el enemigo va a ir en búsqueda del jugador que tenga mas cerca
+    distY=enemigo.y-personaje.y                #eso lo hacemos midiendo la distancia entre cada enemigo y cada jugador
+    dist2X=enemigo.x-personaje2.x              #mediante coordenadas en x y y
+    dist2Y=enemigo.y-personaje2.y              #Luego en los if comparo distancias, el jugador que esté mas cerca será perseguido por el enemigo 
+    distancia1=([pow(distX,2)+pow(distY,2)])  #distancia del jugador azul respecdto al enemigo
+    distancia2=([pow(dist2X,2)+pow(dist2Y,2)])#distancia del jugador amarillo respecto al enemigo
+
+    if(distancia1<distancia2):
+        if enemigo.x>personaje.x:         
+            enemigo.x-=1
+            moverseizq=True
+        if enemigo.x<personaje.x:
+            enemigo.x+=1
+            moverseDer=True
+        if enemigo.y>personaje.y:
+            enemigo.y-=1
+            moverseArriba=True
+        if enemigo.y<personaje.y:
+            enemigo.y+=1
+            moverseAbajo=True
+#        return enemigo
+    if(distancia1>distancia2):
+        if enemigo.x>personaje2.x:         
+            enemigo.x-=1
+            moverseizq=True
+        if enemigo.x<personaje2.x:
+            enemigo.x+=1
+            moverseDer=True
+        if enemigo.y>personaje2.y:
+            enemigo.y-=1
+            moverseArriba=True
+        if enemigo.y<personaje2.y:
+            enemigo.y+=1
+            moverseAbajo=True
+#        return enemigo
 def colisionEnemigo(enemigo, i):
     if enemigo.colliderect(muro):
         if moverseDer==True and moverseArriba==True:
@@ -135,7 +161,7 @@ def colisionEnemigo(enemigo, i):
                 if enemigo.colliderect(muro):
                     moverseizq==False
                     enemigo.x=antx[i] 
-    return enemigo
+#    return enemigo
 
 ##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
@@ -145,8 +171,8 @@ reloj=pygame.time.Clock()
 muros=construir_mapa(mapa)
 direccion=""
 direccion2=""
-personaje= pygame.Rect(1190,560,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
-personaje2=pygame.Rect(40,560,30,30)
+personaje= pygame.Rect(1210,570,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
+personaje2=pygame.Rect(1210,40,30,30)
 listapildoras = []
 pildorasConsumidas=[0,0]
 x=0
@@ -163,16 +189,16 @@ WASD2 = [False, False, False, False]
 ##enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
 ##enemigo2=pygame.Rect(40,200,30,30)
 enemigo=[]
+
+e=5 #cantidad de enemigos
+w=0
+z=0 
+for i in range (e):
+    w=80
+    z=z+100
+    enemigo.append(pygame.Rect(w,z,30,30))
 antx=[0,0,0,0,0]  # listas que guardan las posiciones de los enemigos
 anty=[0,0,0,0,0]
-e=5 #cantidad de enemigos
-x=0
-y=0
-for i in range (e):
-    x=x+80
-    y=y+50
-    enemigo.append(pygame.Rect(x,y,30,30))
-
 moverseizq=True
 moverseDer=True
 moverseArriba=True
@@ -242,7 +268,6 @@ while jugando:
             if event.key==pygame.K_RIGHT:
                 WASD2[3] = False
                 
-
     reloj.tick(60)
     ventana.fill(NEGRO)
     if WASD[0]:
@@ -264,8 +289,7 @@ while jugando:
         personaje2.x+=velocidad
 
     for i in range (e):
-        enemigo[i]=movimientoEnemigo(enemigo[i])
-#    enemigo[1]=movimientoEnemigo(enemigo[1])
+        movimientoEnemigo(enemigo[i])
     
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
@@ -285,7 +309,6 @@ while jugando:
                 WASD[0]=False
                 WASD[1]=False
             elif direccion=="abajo":
-#                personaje.x=oldx
                 WASD[2]=False
                 if direccion=="derecha":
                     if personaje.colliderect(muro):
@@ -296,7 +319,6 @@ while jugando:
                         WASD[1]=False 
                         
             elif direccion=="arriba":
-#                personaje.x=oldx
                 WASD[0]=False
                 if direccion=="derecha":
                     if personaje.colliderect(muro):
@@ -306,7 +328,6 @@ while jugando:
                         WASD[1]=False 
 
             elif direccion=="derecha":
-#                personaje.y=oldy
                 WASD[3]=False
                 if direccion=="arriba":
                     if personaje.colliderect(muro):
@@ -316,7 +337,6 @@ while jugando:
                         WASD[2]=False 
                 
             elif direccion=="izquierda":
-#                personaje.y=oldy
                 WASD[1]=False
                 if direccion=="arriba":
                     if personaje.colliderect(muro):
@@ -341,7 +361,6 @@ while jugando:
                 WASD2[0]=False
                 WASD2[1]=False
             elif direccion2=="abajo":
-#                personaje.x=oldx
                 WASD2[2]=False
                 if direccion2=="derecha":
                     if personaje2.colliderect(muro):
@@ -352,7 +371,6 @@ while jugando:
                         WASD2[1]=False 
                         
             elif direccion2=="arriba":
-#                personaje.x=oldx
                 WASD2[0]=False
                 if direccion2=="derecha":
                     if personaje2.colliderect(muro):
@@ -362,7 +380,6 @@ while jugando:
                         WASD2[1]=False 
 
             elif direccion2=="derecha":
-#                personaje.y=oldy
                 WASD2[3]=False
                 if direccion2=="arriba":
                     if personaje2.colliderect(muro):
@@ -372,7 +389,6 @@ while jugando:
                         WASD2[2]=False 
                 
             elif direccion2=="izquierda":
-#                personaje.y=oldy
                 WASD2[1]=False
                 if direccion2=="arriba":
                     if personaje2.colliderect(muro):
@@ -383,14 +399,12 @@ while jugando:
             personaje2.x=oldx2
             personaje2.y=oldy2
         for i in range (e):    
-            enemigo[i]=colisionEnemigo(enemigo[i],i)
-#            enemigo[0]=colisionEnemigo(enemigo[0],0)
+            colisionEnemigo(enemigo[i],i)
 
     for i in range (e):         
         anty[i]=enemigo[i].y
         antx[i]=enemigo[i].x
-##        antx[1]=enemigo[1].x
-##        anty[1]=enemigo[1].y
+
     oldx = personaje.x 
     oldy = personaje.y
     oldx2 = personaje2.x 
@@ -414,7 +428,6 @@ while jugando:
         print("Perdiste")
         print("Pildoras Consumidas: ", pildorasConsumidas)
         jugando=False
-
     
     #dibujos
     dibujar_mapa(ventana, muros)
@@ -423,7 +436,6 @@ while jugando:
     dibujar_pildoras(ventana,listapildoras)
     for i in range (e):
         dibujar_enemigo(ventana,enemigo[i])
-    #dibujar_enemigo(ventana,enemigo[1])
     #Actualizar
     pygame.display.update()
 
