@@ -195,7 +195,8 @@ def colisionEnemigo(enemigo, i):
                 if enemigo.colliderect(muro):
                     moverseizq==False
                     enemigo.x=antx[i]
-def ComeEnemigos(vac, jugador):
+def ComeEnemigos(vac, jugador,i):
+    cantComidos=0
 ##    if jugador.colliderect(vac):
 ##        if vac.width>0:
 ##            #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
@@ -203,14 +204,15 @@ def ComeEnemigos(vac, jugador):
 ##            vac.height=0
 ##            tiempoparacomer=tiempo+5
 ##            print("tiempoparacomer",tiempoparacomer)
-    if(tiempo<tiempoparacomer):
+    if(tiempo<tiempoparacomer[i]):
       #  tiempo=tiempo+1
         for i in range (e):
             if jugador.colliderect(enemigo[i]):
                 print("JUGADOR COMIO ENEMIGO")
                 enemigo[i]=pygame.Rect(0,0,0,0)
                 muertoEnemigo[i]=True
-#    return tiempoparacomer
+                cantComidos=cantComidos+1
+    return cantComidos
                             
 ##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
@@ -222,6 +224,7 @@ listapildoras = []
 vacunas=[]
 vacunas.append(pygame.Rect(1000,570,10,20))
 vacunas.append(pygame.Rect(500,570,10,20))
+enemigosEliminados=[0,0]
 muros=construir_mapa(mapa, listapildoras)
 direccion=""
 direccion2=""
@@ -267,7 +270,8 @@ moverseAbajo=True
 #bucle ppal
 jugando = True
 tiempo=0
-tiempoparacomer=0
+tiempoparacomer=[0,0]
+
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
@@ -488,39 +492,46 @@ while jugando:
             recs.width=0
             recs.height=0   
     for i in range (e):
-        if personaje.colliderect(vacunas[0]) or personaje.colliderect(vacunas[1]) or tiempoparacomer>tiempo:
+        if personaje.colliderect(vacunas[0]) or personaje.colliderect(vacunas[1]) or tiempoparacomer[0]>tiempo:
             for vac in vacunas:
                 if personaje.colliderect(vac):
                     if vac.width>0:
                         #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
                         vac.width=0
                         vac.height=0
-                        tiempoparacomer=tiempo+5
-                        print("tiempoparacomer",tiempoparacomer)
-            ComeEnemigos(vac, personaje)
+                        tiempoparacomer[0]=tiempo+5
+                        print("tiempoparacomer",tiempoparacomer[0])
+            enemigosEliminados[0]=enemigosEliminados[0]+ComeEnemigos(vac, personaje,0)
         elif personaje.colliderect(enemigo[i]):
             print("Perdiste JUGADOR AZUL")
             print("Pildoras Consumidas: ", pildorasConsumidas[0])
             personaje=pygame.Rect(0,0,0,0)
             perdioAzul=True
-        if personaje2.colliderect(enemigo[i]):
+        if personaje2.colliderect(vacunas[0]) or personaje2.colliderect(vacunas[1]) or tiempoparacomer[1]>tiempo:
+            for vac in vacunas:
+                if personaje2.colliderect(vac):
+                    if vac.width>0:
+                        #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
+                        vac.width=0
+                        vac.height=0
+                        tiempoparacomer[1]=tiempo+5
+                        print("tiempoparacomer2",tiempoparacomer[1])
+            enemigosEliminados[1]=enemigosEliminados[1]+ComeEnemigos(vac, personaje2,1)
+        elif personaje2.colliderect(enemigo[i]):
             print("Perdiste JUGADOR AMARILLO")
             print("Pildoras Consumidas: ", pildorasConsumidas[1])
             personaje2=pygame.Rect(0,0,0,0)
             perdioAmarillo=True
             
-
-    ##    if personaje2.colliderect(vacunas[0]) or personaje2.colliderect(vacunas[1]):
-    ##        ComeEnemigos()
-            
+  
     if perdioAmarillo==True and perdioAzul==True:
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
         miTexto=miFuente.render("GAME OVER :(",0,(200,60,80))
         miTexto1=miFuente.render("TE HAS CONTAGIADO COVID... INTENTALO DE NUEVO",0,(200,60,80))
-        texto= "PUNTAJE JUGADOR AZUL: "+ str(pildorasConsumidas[0])
+        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+"COVID ELIMINADOS: "+str(enemigosEliminados[0])
         miTexto2=miFuente.render(texto,0,(200,60,80))
-        texto= "PUNTAJE JUGADOR AMARILLO: "+ str(pildorasConsumidas[1])
+        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"COVID ELIMINADOS: "+str(enemigosEliminados[1])
         miTexto3=miFuente.render(texto,0,(200,60,80))
         while True:
             for event in pygame.event.get():
@@ -539,14 +550,14 @@ while jugando:
     if pildorasConsumidas[0]+pildorasConsumidas[1]==len(listapildoras):
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
-        if pildorasConsumidas[0]>pildorasConsumidas[1]:
+        if pildorasConsumidas[0]>pildorasConsumidas[1] and perdioAzul==False:
             miTexto=miFuente.render("JUGADOR AZUL HAS GANADO EL JUEGO!!!",0,(200,60,80))
         else:
             miTexto=miFuente.render("JUGADOR AMARILLO HAS GANADO EL JUEGO!!!",0,(200,60,80))
         miTexto1=miFuente.render("HAN LOGRADO RESISTIR AL COVID",0,(200,60,80))
-        texto= "PILDORAS RECOLECTADAS JUGADOR AZUL: "+ str(pildorasConsumidas[0])
+        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+"COVID ELIMINADOS: "+str(enemigosEliminados[0])
         miTexto2=miFuente.render(texto,0,(200,60,80))
-        texto= "PILDORAS RECOLECTADAS JUGADOR AMARILLO: "+ str(pildorasConsumidas[1])
+        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"COVID ELIMINADOS: "+str(enemigosEliminados[1])
         miTexto3=miFuente.render(texto,0,(200,60,80))
         while True:
             for event in pygame.event.get():
@@ -562,7 +573,7 @@ while jugando:
             pygame.display.update()
         jugando==False
         break
-    #dibujos MAPA, JUGADORES, ENEMIGOS, PILDORAS
+    #dibujos MAPA, JUGADORES, ENEMIGOS, PILDORAS, VACUNAS
     dibujar_mapa(ventana, muros)
     if perdioAzul==False:
         dibujar_personaje(ventana,personaje)
