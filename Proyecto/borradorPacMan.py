@@ -4,9 +4,11 @@ import os
 import pygame
 import math
 from pygame import Rect
+from pygame.locals import*
 #inicializar
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
 pygame.init()
+
 
 #medidas de la pantalla
 ANCHO=1270
@@ -51,9 +53,11 @@ def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
 def dibujar_personaje2(superficie, rectangulo):
     pygame.draw.rect(superficie, AMARILLO, rectangulo)
-def dibujar_pildoras(superficie, rectangulo):
+def dibujar_vacunas_pildoras(superficie, rectangulo, recta):
     for recs in listapildoras:
         pygame.draw.rect(ventana,VERDE, recs)
+    for vac in vacunas:
+        pygame.draw.rect(ventana,CELESTE,vac)
     
 def dibujar_enemigo(superficie, rectangulo):
     pygame.draw.rect(superficie, ROJO, rectangulo)
@@ -76,19 +80,47 @@ def construir_mapa(mapa, listapildoras):
 def dibujar_mapa(superficie, muros):
     for muro in muros:
         dibujar_muro(superficie,muro)
-def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enemigos me persigan
-    distancia1=0
-    distancia2=0
-    distX=0
-    distY=0                                    #A continuación utilizaremos pitagoras para comparar distancias entre jugadores y enemigos
-    distX=enemigo.x-personaje.x                #el enemigo va a ir en búsqueda del jugador que tenga mas cerca
-    distY=enemigo.y-personaje.y                #eso lo hacemos midiendo la distancia entre cada enemigo y cada jugador
-    dist2X=enemigo.x-personaje2.x              #mediante coordenadas en x y y
-    dist2Y=enemigo.y-personaje2.y              #Luego en los if comparo distancias, el jugador que esté mas cerca será perseguido por el enemigo 
-    distancia1=([pow(distX,2)+pow(distY,2)])  #distancia del jugador azul respecdto al enemigo
-    distancia2=([pow(dist2X,2)+pow(dist2Y,2)])#distancia del jugador amarillo respecto al enemigo
-    if perdioAzul==False and perdioAmarillo==False:
-        if(distancia1<distancia2):
+def movimientoEnemigo(enemigo, muertoEnemigo):  #con los siguientes if logro hacer que los enemigos me persigan
+    if(muertoEnemigo==False):
+        distancia1=0
+        distancia2=0
+        distX=0
+        distY=0                                    #A continuación utilizaremos pitagoras para comparar distancias entre jugadores y enemigos
+        distX=enemigo.x-personaje.x                #el enemigo va a ir en búsqueda del jugador que tenga mas cerca
+        distY=enemigo.y-personaje.y                #eso lo hacemos midiendo la distancia entre cada enemigo y cada jugador
+        dist2X=enemigo.x-personaje2.x              #mediante coordenadas en x y y
+        dist2Y=enemigo.y-personaje2.y              #Luego en los if comparo distancias, el jugador que esté mas cerca será perseguido por el enemigo 
+        distancia1=([pow(distX,2)+pow(distY,2)])  #distancia del jugador azul respecdto al enemigo
+        distancia2=([pow(dist2X,2)+pow(dist2Y,2)])#distancia del jugador amarillo respecto al enemigo
+        if perdioAzul==False and perdioAmarillo==False:
+            if(distancia1<distancia2):
+                if enemigo.x>personaje.x:         
+                    enemigo.x-=1
+                    moverseizq=True
+                if enemigo.x<personaje.x:
+                    enemigo.x+=1
+                    moverseDer=True
+                if enemigo.y>personaje.y:
+                    enemigo.y-=1
+                    moverseArriba=True
+                if enemigo.y<personaje.y:
+                    enemigo.y+=1
+                    moverseAbajo=True
+
+            if(distancia1>distancia2):
+                if enemigo.x>personaje2.x:         
+                    enemigo.x-=1
+                    moverseizq=True
+                if enemigo.x<personaje2.x:
+                    enemigo.x+=1
+                    moverseDer=True
+                if enemigo.y>personaje2.y:
+                    enemigo.y-=1
+                    moverseArriba=True
+                if enemigo.y<personaje2.y:
+                    enemigo.y+=1
+                    moverseAbajo=True
+        if perdioAmarillo==True:
             if enemigo.x>personaje.x:         
                 enemigo.x-=1
                 moverseizq=True
@@ -101,8 +133,7 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
             if enemigo.y<personaje.y:
                 enemigo.y+=1
                 moverseAbajo=True
-
-        if(distancia1>distancia2):
+        if perdioAzul==True:
             if enemigo.x>personaje2.x:         
                 enemigo.x-=1
                 moverseizq=True
@@ -115,32 +146,6 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
             if enemigo.y<personaje2.y:
                 enemigo.y+=1
                 moverseAbajo=True
-    if perdioAmarillo==True:
-        if enemigo.x>personaje.x:         
-            enemigo.x-=1
-            moverseizq=True
-        if enemigo.x<personaje.x:
-            enemigo.x+=1
-            moverseDer=True
-        if enemigo.y>personaje.y:
-            enemigo.y-=1
-            moverseArriba=True
-        if enemigo.y<personaje.y:
-            enemigo.y+=1
-            moverseAbajo=True
-    if perdioAzul==True:
-        if enemigo.x>personaje2.x:         
-            enemigo.x-=1
-            moverseizq=True
-        if enemigo.x<personaje2.x:
-            enemigo.x+=1
-            moverseDer=True
-        if enemigo.y>personaje2.y:
-            enemigo.y-=1
-            moverseArriba=True
-        if enemigo.y<personaje2.y:
-            enemigo.y+=1
-            moverseAbajo=True
 
 def colisionEnemigo(enemigo, i):
     if enemigo.colliderect(muro):
@@ -190,13 +195,33 @@ def colisionEnemigo(enemigo, i):
                 if enemigo.colliderect(muro):
                     moverseizq==False
                     enemigo.x=antx[i]
-
+def ComeEnemigos(vac, jugador):
+##    if jugador.colliderect(vac):
+##        if vac.width>0:
+##            #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
+##            vac.width=0
+##            vac.height=0
+##            tiempoparacomer=tiempo+5
+##            print("tiempoparacomer",tiempoparacomer)
+    if(tiempo<tiempoparacomer):
+      #  tiempo=tiempo+1
+        for i in range (e):
+            if jugador.colliderect(enemigo[i]):
+                print("JUGADOR COMIO ENEMIGO")
+                enemigo[i]=pygame.Rect(0,0,0,0)
+                muertoEnemigo[i]=True
+#    return tiempoparacomer
+                            
 ##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
+pygame.time.set_timer(pygame.USEREVENT,1000)
 
 #datos
 listapildoras = []
+vacunas=[]
+vacunas.append(pygame.Rect(1000,570,10,20))
+vacunas.append(pygame.Rect(500,570,10,20))
 muros=construir_mapa(mapa, listapildoras)
 direccion=""
 direccion2=""
@@ -232,6 +257,7 @@ for i in range (e):
     w=80
     z=z+100
     enemigo.append(pygame.Rect(w,z,30,30))
+muertoEnemigo=[False, False, False, False,False]
 antx=[0,0,0,0,0]  # listas que guardan las posiciones de los enemigos
 anty=[0,0,0,0,0]
 moverseizq=True
@@ -240,10 +266,14 @@ moverseArriba=True
 moverseAbajo=True
 #bucle ppal
 jugando = True
+tiempo=0
+tiempoparacomer=0
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
-    
+        if event.type==pygame.USEREVENT:
+            tiempo+=1
+            print(tiempo)
         if event.type == pygame.QUIT: 
         
             pygame.quit()
@@ -323,7 +353,7 @@ while jugando:
         personaje2.x+=velocidad
 
     for i in range (e):
-        movimientoEnemigo(enemigo[i])
+        movimientoEnemigo(enemigo[i], muertoEnemigo[i])
     
 #el siguiente ciclo for me sirve para controlar las colisiones con los muros, hubo que hacer varias pruebas
 #porque me hacía errores al presionar dos teclas, por ej al llegar a una esquina presionando dos teclas
@@ -458,7 +488,17 @@ while jugando:
             recs.width=0
             recs.height=0   
     for i in range (e):
-        if personaje.colliderect(enemigo[i]):
+        if personaje.colliderect(vacunas[0]) or personaje.colliderect(vacunas[1]) or tiempoparacomer>tiempo:
+            for vac in vacunas:
+                if personaje.colliderect(vac):
+                    if vac.width>0:
+                        #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
+                        vac.width=0
+                        vac.height=0
+                        tiempoparacomer=tiempo+5
+                        print("tiempoparacomer",tiempoparacomer)
+            ComeEnemigos(vac, personaje)
+        elif personaje.colliderect(enemigo[i]):
             print("Perdiste JUGADOR AZUL")
             print("Pildoras Consumidas: ", pildorasConsumidas[0])
             personaje=pygame.Rect(0,0,0,0)
@@ -467,7 +507,12 @@ while jugando:
             print("Perdiste JUGADOR AMARILLO")
             print("Pildoras Consumidas: ", pildorasConsumidas[1])
             personaje2=pygame.Rect(0,0,0,0)
-            perdioAmarillo=True            
+            perdioAmarillo=True
+            
+
+    ##    if personaje2.colliderect(vacunas[0]) or personaje2.colliderect(vacunas[1]):
+    ##        ComeEnemigos()
+            
     if perdioAmarillo==True and perdioAzul==True:
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
@@ -523,7 +568,8 @@ while jugando:
         dibujar_personaje(ventana,personaje)
     if perdioAmarillo==False:
         dibujar_personaje2(ventana,personaje2)
-    dibujar_pildoras(ventana,listapildoras)
+    dibujar_vacunas_pildoras(ventana,listapildoras,vacunas)
+
     for i in range (e):
         dibujar_enemigo(ventana,enemigo[i])
     #Actualizar Pantalla
