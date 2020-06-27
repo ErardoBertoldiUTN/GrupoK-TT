@@ -8,7 +8,7 @@ from pygame import Rect
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
 pygame.init()
 
-#medidas
+#medidas de la pantalla
 ANCHO=1270
 ALTO=640
 
@@ -58,7 +58,7 @@ def dibujar_pildoras(superficie, rectangulo):
 def dibujar_enemigo(superficie, rectangulo):
     pygame.draw.rect(superficie, ROJO, rectangulo)
 
-def construir_mapa(mapa):
+def construir_mapa(mapa, listapildoras):
     muros=[]
     x=0
     y=0
@@ -66,6 +66,8 @@ def construir_mapa(mapa):
         for muro in fila:
             if muro == "X":
                 muros.append(pygame.Rect(x,y,40,40))
+            else:
+                listapildoras.append(pygame.Rect(x+10,y+10,15,15))
             x+=40
         x=0
         y+=40
@@ -99,8 +101,7 @@ def movimientoEnemigo(enemigo):  #con los siguientes if logro hacer que los enem
             if enemigo.y<personaje.y:
                 enemigo.y+=1
                 moverseAbajo=True
-#        return enemigo
-#    if perdioAmarillo==False:
+
         if(distancia1>distancia2):
             if enemigo.x>personaje2.x:         
                 enemigo.x-=1
@@ -189,54 +190,32 @@ def colisionEnemigo(enemigo, i):
                 if enemigo.colliderect(muro):
                     moverseizq==False
                     enemigo.x=antx[i]
-##        elif moverseAbajo==True and moverseizq==True:
-##            moverseAbajo==False
-##            enemigo.y=anty[i]
-##        #    enemigo.x-=1
-##            if enemigo.colliderect(muro):
-##                moverseizq==False
-##                enemigo.x=antx[i]
-##                enemigo.y+=1
-##                moverseAbajo==True
-##                
-##                if enemigo.colliderect(muro):
-##                    moverseAbajo==False
-##                    enemigo.y=anty[i] 
-##        elif moverseArriba==True and moverseizq==True:
-##            moverseArriba==False
-##            enemigo.y=anty[i]
-##         #   enemigo.x-=1
-##            if enemigo.colliderect(muro):
-##                moverseizq==False
-##                enemigo.x=antx[i]
-##                enemigo.y-=1
-##                moverseArriba==True
-##                
-##                if enemigo.colliderect(muro):
-##                    moverseArriba==False
-##                    enemigo.y=anty[i] 
-#    return enemigo
 
 ##Ventana
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
 
 #datos
-muros=construir_mapa(mapa)
+listapildoras = []
+muros=construir_mapa(mapa, listapildoras)
 direccion=""
 direccion2=""
 personaje= pygame.Rect(1210,570,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
 personaje2=pygame.Rect(1210,40,30,30)
 perdioAzul=False
 perdioAmarillo=False
-listapildoras = []
+
 pildorasConsumidas=[0,0]
 x=0
-for i in range (30):
-    y=50
-    x=x+40
-    listapildoras.append(pygame.Rect(x,y,15,15))
-
+##for i in range (60):
+##    if i<30:
+##        y=50
+##        x=x+40
+##        listapildoras.append(pygame.Rect(x,y,15,15))
+##    if i>30:
+##        y=570
+##        x=x-40
+##        listapildoras.append(pygame.Rect(x,y,15,15))
 velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
 #con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
@@ -507,29 +486,3 @@ while jugando:
 
 pygame.quit()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
