@@ -66,8 +66,8 @@ def construir_mapa(mapa, listapildoras):
         for muro in fila:
             if muro == "X":
                 muros.append(pygame.Rect(x,y,40,40))
-            else:
-                listapildoras.append(pygame.Rect(x+10,y+10,15,15))
+##            else:
+##                listapildoras.append(pygame.Rect(x+10,y+10,15,15))
             x+=40
         x=0
         y+=40
@@ -207,11 +207,11 @@ perdioAmarillo=False
 
 pildorasConsumidas=[0,0]
 x=0
-##for i in range (60):
-##    if i<30:
-##        y=50
-##        x=x+40
-##        listapildoras.append(pygame.Rect(x,y,15,15))
+for i in range (30):
+#    if i<30:
+    y=50
+    x=x+40
+    listapildoras.append(pygame.Rect(x,y,15,15))
 ##    if i>30:
 ##        y=570
 ##        x=x-40
@@ -282,7 +282,6 @@ while jugando:
             if event.key==pygame.K_RIGHT:
                 WASD2[3] = True
                 direccion2="derecha"
-
                 
         if event.type == pygame.KEYUP:                
             if event.key == pygame.K_w:  
@@ -449,13 +448,13 @@ while jugando:
         if personaje.colliderect(recs):
             if recs.width>0:
                 pildorasConsumidas[0]=pildorasConsumidas[0]+1
-                print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
+                #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
             recs.width=0
             recs.height=0
         if personaje2.colliderect(recs):
             if recs.width>0:
                 pildorasConsumidas[1]=pildorasConsumidas[1]+1
-                print("Pildoras Consumidas jugador AMARILLO: ", pildorasConsumidas[1])
+                #print("Pildoras Consumidas jugador AMARILLO: ", pildorasConsumidas[1])
             recs.width=0
             recs.height=0   
     for i in range (e):
@@ -470,9 +469,55 @@ while jugando:
             personaje2=pygame.Rect(0,0,0,0)
             perdioAmarillo=True            
     if perdioAmarillo==True and perdioAzul==True:
+        ventana.fill(BLANCO)
+        miFuente=pygame.font.Font(None,30)
+        miTexto=miFuente.render("GAME OVER :(",0,(200,60,80))
+        miTexto1=miFuente.render("TE HAS CONTAGIADO COVID... INTENTALO DE NUEVO",0,(200,60,80))
+        texto= "PUNTAJE JUGADOR AZUL: "+ str(pildorasConsumidas[0])
+        miTexto2=miFuente.render(texto,0,(200,60,80))
+        texto= "PUNTAJE JUGADOR AMARILLO: "+ str(pildorasConsumidas[1])
+        miTexto3=miFuente.render(texto,0,(200,60,80))
+        while True:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE:
+                        break
+            ventana.blit(miTexto,(300,50))
+            ventana.blit(miTexto1,(300,100))
+            ventana.blit(miTexto2,(300,200))
+            ventana.blit(miTexto3,(300,300))
+            pygame.display.update()
         jugando==False
         break
-    #dibujos
+    if pildorasConsumidas[0]+pildorasConsumidas[1]==len(listapildoras):
+        ventana.fill(BLANCO)
+        miFuente=pygame.font.Font(None,30)
+        if pildorasConsumidas[0]>pildorasConsumidas[1]:
+            miTexto=miFuente.render("JUGADOR AZUL HAS GANADO EL JUEGO!!!",0,(200,60,80))
+        else:
+            miTexto=miFuente.render("JUGADOR AMARILLO HAS GANADO EL JUEGO!!!",0,(200,60,80))
+        miTexto1=miFuente.render("HAN LOGRADO RESISTIR AL COVID",0,(200,60,80))
+        texto= "PILDORAS RECOLECTADAS JUGADOR AZUL: "+ str(pildorasConsumidas[0])
+        miTexto2=miFuente.render(texto,0,(200,60,80))
+        texto= "PILDORAS RECOLECTADAS JUGADOR AMARILLO: "+ str(pildorasConsumidas[1])
+        miTexto3=miFuente.render(texto,0,(200,60,80))
+        while True:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE:
+                        break
+            ventana.blit(miTexto,(300,50))
+            ventana.blit(miTexto1,(300,100))
+            ventana.blit(miTexto2,(300,200))
+            ventana.blit(miTexto3,(300,300))
+            pygame.display.update()
+        jugando==False
+        break
+    #dibujos MAPA, JUGADORES, ENEMIGOS, PILDORAS
     dibujar_mapa(ventana, muros)
     if perdioAzul==False:
         dibujar_personaje(ventana,personaje)
@@ -481,7 +526,7 @@ while jugando:
     dibujar_pildoras(ventana,listapildoras)
     for i in range (e):
         dibujar_enemigo(ventana,enemigo[i])
-    #Actualizar
+    #Actualizar Pantalla
     pygame.display.update()
 
 pygame.quit()
