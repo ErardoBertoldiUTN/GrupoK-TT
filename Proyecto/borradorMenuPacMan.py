@@ -22,7 +22,9 @@ AMARILLO=(255,255,0)
 BLANCO=(255,255,255)
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
+cantJugadores=0
 salir=False
+cursor=pygame.Rect(0,0,30,30)
 UnJugador=pygame.Rect(570,450,200,30)
 DosJugadores=pygame.Rect(570,500,200,30)
 while salir!=True:
@@ -31,7 +33,24 @@ while salir!=True:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             salir=True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if cursor.colliderect(UnJugador):
+                cantJugadores=1
+                print("cantidad de jugadores",cantJugadores)
+                salir=True
+                break 
+            if cursor.colliderect(DosJugadores):
+                cantJugadores=2
+                print("cantidad de jugadores",cantJugadores)
+                salir=True
+                break
+    pos=pygame.mouse.get_pos()
+    cursor.x=pos[0]
+    cursor.y=pos[1]
     dibujar_botones(ventana,UnJugador,DosJugadores)     
     pygame.display.update()
     
 pygame.quit()
+
+
+
