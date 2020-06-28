@@ -1,5 +1,4 @@
 #JUGADOR AZUL JUEGA CON TECLAS AWSD, JUGADOR AMARILLO JUEGA CON LAS FLECHAS
-
 import os
 import pygame
 import math
@@ -8,7 +7,6 @@ from pygame.locals import*
 #inicializar
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
 pygame.init()
-
 
 #medidas de la pantalla
 ANCHO=1270
@@ -23,6 +21,12 @@ ROJO=(255,0,0)
 AMARILLO=(255,255,0)
 BLANCO=(255,255,255)
 CELESTE=(0,255,255)
+
+#MENU INICIAL
+def MenuInicial():
+    
+    return cantJugadores
+
 #Mapas
 #1270/40=32 baldosas a lo ancho
 #640/40=16 baldosas a lo largo
@@ -271,7 +275,7 @@ moverseAbajo=True
 jugando = True
 tiempo=0
 tiempoparacomer=[0,0]
-
+cantJugadores=MenuInicial() #Llamando al Menu inicial
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
