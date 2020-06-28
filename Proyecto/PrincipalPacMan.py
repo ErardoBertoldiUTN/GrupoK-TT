@@ -4,6 +4,8 @@ import pygame
 import math
 from pygame import Rect
 from pygame.locals import*
+import MenuPacMan as menu
+
 #inicializar
 os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
 pygame.init()
@@ -23,9 +25,9 @@ BLANCO=(255,255,255)
 CELESTE=(0,255,255)
 
 #MENU INICIAL
-def MenuInicial():
-    
-    return cantJugadores
+##def MenuInicial():
+##    
+##    return cantJugadores
 
 #Mapas
 #1270/40=32 baldosas a lo ancho
@@ -275,7 +277,7 @@ moverseAbajo=True
 jugando = True
 tiempo=0
 tiempoparacomer=[0,0]
-cantJugadores=MenuInicial() #Llamando al Menu inicial
+cantJugadores=menu.pantallaMenu() #Llamando al Menu inicial
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
@@ -537,20 +539,27 @@ while jugando:
         miTexto2=miFuente.render(texto,0,(200,60,80))
         texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"COVID ELIMINADOS: "+str(enemigosEliminados[1])
         miTexto3=miFuente.render(texto,0,(200,60,80))
-        while True:
+        salir=False
+        while salir!=True:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     pygame.quit()
+                    jugando=False
+                    ventana.fill(BLANCO)
+                    salir=True
                 if event.type == pygame.KEYDOWN:
                     if event.key==pygame.K_ESCAPE:
+                        jugando=False
+                        ventana.fill(BLANCO)
+                        salir=True
                         break
             ventana.blit(miTexto,(300,50))
             ventana.blit(miTexto1,(300,100))
             ventana.blit(miTexto2,(300,200))
             ventana.blit(miTexto3,(300,300))
             pygame.display.update()
-        jugando==False
-        break
+        #jugando==False
+        #break
     if pildorasConsumidas[0]+pildorasConsumidas[1]==len(listapildoras):
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
@@ -559,24 +568,31 @@ while jugando:
         else:
             miTexto=miFuente.render("JUGADOR AMARILLO HAS GANADO EL JUEGO!!!",0,(200,60,80))
         miTexto1=miFuente.render("HAN LOGRADO RESISTIR AL COVID",0,(200,60,80))
-        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+"COVID ELIMINADOS: "+str(enemigosEliminados[0])
+        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+" COVID ELIMINADOS: "+str(enemigosEliminados[0])
         miTexto2=miFuente.render(texto,0,(200,60,80))
-        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"COVID ELIMINADOS: "+str(enemigosEliminados[1])
+        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+" COVID ELIMINADOS: "+str(enemigosEliminados[1])
         miTexto3=miFuente.render(texto,0,(200,60,80))
-        while True:
+        salir=False
+        while salir!=True:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     pygame.quit()
+                    jugando=False
+                    ventana.fill(BLANCO)
+                    salir=True
                 if event.type == pygame.KEYDOWN:
                     if event.key==pygame.K_ESCAPE:
+                        jugando=False
+                        ventana.fill(BLANCO)
+                        salir=True
                         break
             ventana.blit(miTexto,(300,50))
             ventana.blit(miTexto1,(300,100))
             ventana.blit(miTexto2,(300,200))
             ventana.blit(miTexto3,(300,300))
             pygame.display.update()
-        jugando==False
-        break
+        #jugando==False
+        #break
     #dibujos MAPA, JUGADORES, ENEMIGOS, PILDORAS, VACUNAS
     dibujar_mapa(ventana, muros)
     if perdioAzul==False:
