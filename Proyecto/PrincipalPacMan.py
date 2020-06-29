@@ -24,10 +24,6 @@ AMARILLO=(255,255,0)
 BLANCO=(255,255,255)
 CELESTE=(0,255,255)
 
-#MENU INICIAL
-##def MenuInicial():
-##    
-##    return cantJugadores
 
 #Mapas
 #1270/40=32 baldosas a lo ancho
@@ -51,7 +47,7 @@ mapa=[  #las X me representan las baldosas
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     ]
 
-#funciones
+############################## FUNCIONES DEL PROGRAMA ######################################################
 def dibujar_muro(superficie, rectangulo):
     pygame.draw.rect(superficie, MARRON, rectangulo)
 
@@ -220,7 +216,8 @@ def ComeEnemigos(vac, jugador,i):
                 cantComidos=cantComidos+1
     return cantComidos
                             
-##Ventana
+###############################################################CUERPO PRINCIPAL DEL PROGRAMA######################################################
+
 ventana=pygame.display.set_mode((ANCHO,ALTO))
 reloj=pygame.time.Clock()
 pygame.time.set_timer(pygame.USEREVENT,1000)
@@ -278,6 +275,13 @@ jugando = True
 tiempo=0
 tiempoparacomer=[0,0]
 cantJugadores=menu.pantallaMenu() #Llamando al Menu inicial
+jugador2=False
+print("Cantidad de jugadores: ", cantJugadores)
+if cantJugadores==1:
+    perdioAmarillo=True
+elif cantJugadores==2:
+    jugador2=True
+
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
@@ -528,16 +532,15 @@ while jugando:
             print("Pildoras Consumidas: ", pildorasConsumidas[1])
             personaje2=pygame.Rect(0,0,0,0)
             perdioAmarillo=True
-            
-  
+              
     if perdioAmarillo==True and perdioAzul==True:
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
         miTexto=miFuente.render("GAME OVER :(",0,(200,60,80))
         miTexto1=miFuente.render("TE HAS CONTAGIADO COVID... INTENTALO DE NUEVO",0,(200,60,80))
-        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+"COVID ELIMINADOS: "+str(enemigosEliminados[0])
+        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+"  COVID ELIMINADOS: "+str(enemigosEliminados[0])
         miTexto2=miFuente.render(texto,0,(200,60,80))
-        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"COVID ELIMINADOS: "+str(enemigosEliminados[1])
+        texto= "JUGADOR AMARILLO PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[1])+"  COVID ELIMINADOS: "+str(enemigosEliminados[1])
         miTexto3=miFuente.render(texto,0,(200,60,80))
         salir=False
         while salir!=True:
@@ -556,10 +559,10 @@ while jugando:
             ventana.blit(miTexto,(300,50))
             ventana.blit(miTexto1,(300,100))
             ventana.blit(miTexto2,(300,200))
-            ventana.blit(miTexto3,(300,300))
+            if jugador2==True:
+                ventana.blit(miTexto3,(300,300))
             pygame.display.update()
-        #jugando==False
-        #break
+
     if pildorasConsumidas[0]+pildorasConsumidas[1]==len(listapildoras):
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
@@ -589,10 +592,10 @@ while jugando:
             ventana.blit(miTexto,(300,50))
             ventana.blit(miTexto1,(300,100))
             ventana.blit(miTexto2,(300,200))
-            ventana.blit(miTexto3,(300,300))
+            if jugador2==True:
+                ventana.blit(miTexto3,(300,300))
             pygame.display.update()
-        #jugando==False
-        #break
+
     #dibujos MAPA, JUGADORES, ENEMIGOS, PILDORAS, VACUNAS
     dibujar_mapa(ventana, muros)
     if perdioAzul==False:
