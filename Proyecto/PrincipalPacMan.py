@@ -46,7 +46,24 @@ mapa=[  #las X me representan las baldosas
     "X                              X",
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     ]
-
+mapaUnJugador=[
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XX                            XX",
+    "XX   XXXX      X              XX",
+    "XX         XXX   XXXXX  XXX   XX",
+    "XX    X                     X XX",
+    "XX    X   XX  XXXX XXX XXX  X XX",
+    "XX    X   XX                X XX",
+    "XX    X   XX  XXXX XXX XX     XX",
+    "XX                            XX",
+    "XX   X  XXXX XXXXX XXXX XXXX  XX",
+    "XX   X                        XX",
+    "XX   X  XXX XXX XXX XXX XXXX  XX",
+    "XX                            XX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    ]
 ############################## FUNCIONES DEL PROGRAMA ######################################################
 def dibujar_muro(superficie, rectangulo):
     pygame.draw.rect(superficie, MARRON, rectangulo)
@@ -55,7 +72,7 @@ def dibujar_personaje(superficie, rectangulo):
     pygame.draw.rect(superficie, AZUL, rectangulo)
 def dibujar_personaje2(superficie, rectangulo):
     pygame.draw.rect(superficie, AMARILLO, rectangulo)
-def dibujar_vacunas_pildoras(superficie, rectangulo, recta):
+def dibujar_vacunas_pildoras(superficie, listapildoras, vacunas):
     for recs in listapildoras:
         pygame.draw.rect(ventana,VERDE, recs)
     for vac in vacunas:
@@ -72,8 +89,8 @@ def construir_mapa(mapa, listapildoras):
         for muro in fila:
             if muro == "X":
                 muros.append(pygame.Rect(x,y,40,40))
-##            else:
-##                listapildoras.append(pygame.Rect(x+10,y+10,15,15))
+            else:
+                listapildoras.append(pygame.Rect(x+10,y+10,15,15))
             x+=40
         x=0
         y+=40
@@ -199,15 +216,8 @@ def colisionEnemigo(enemigo, i):
                     enemigo.x=antx[i]
 def ComeEnemigos(vac, jugador,i):
     cantComidos=0
-##    if jugador.colliderect(vac):
-##        if vac.width>0:
-##            #print("Pildoras Consumidas jugador AZUL: ", pildorasConsumidas[0])
-##            vac.width=0
-##            vac.height=0
-##            tiempoparacomer=tiempo+5
-##            print("tiempoparacomer",tiempoparacomer)
     if(tiempo<tiempoparacomer[i]):
-      #  tiempo=tiempo+1
+
         for i in range (e):
             if jugador.colliderect(enemigo[i]):
                 print("JUGADOR COMIO ENEMIGO")
@@ -225,37 +235,23 @@ pygame.time.set_timer(pygame.USEREVENT,1000)
 #datos
 listapildoras = []
 vacunas=[]
-vacunas.append(pygame.Rect(1000,570,10,20))
-vacunas.append(pygame.Rect(500,570,10,20))
 enemigosEliminados=[0,0]
-muros=construir_mapa(mapa, listapildoras)
 direccion=""
 direccion2=""
-personaje= pygame.Rect(1210,570,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
-personaje2=pygame.Rect(1210,40,30,30)
+personaje= pygame.Rect(1170,530,30,30)  #los primeros dos números son la posición en la que aparecerá una vez ejecutado el programa, las siguientes dos numeros refieren al tamaño
+personaje2=pygame.Rect(1170,80,30,30)
 perdioAzul=False
 perdioAmarillo=False
-
 pildorasConsumidas=[0,0]
 x=0
-for i in range (30):
-#    if i<30:
-    y=50
-    x=x+40
-    listapildoras.append(pygame.Rect(x,y,15,15))
-##    if i>30:
-##        y=570
-##        x=x-40
-##        listapildoras.append(pygame.Rect(x,y,15,15))
-velocidad=10                         #constante para controlar la velocidad de movimiento del personaje
+
+velocidad=7                         #constante para controlar la velocidad de movimiento del personaje
 #con la siguiente lista boolean se controla cuando se mantiene apretada una tecla de movimiento.
 #Después vi que existía una función getpressed que me lo hubiese hecho mas facil, pero igual con esta forma funciona
 WASD = [False, False, False, False]
 WASD2 = [False, False, False, False]
-##enemigo=pygame.Rect(40,40,30,30)  #inicialmente creamos un enemigo para que nos persiga, después agregaremos mas enemigos
-##enemigo2=pygame.Rect(40,200,30,30)
-enemigo=[]
 
+enemigo=[]
 e=5 #cantidad de enemigos
 w=0
 z=0 
@@ -279,15 +275,20 @@ jugador2=False
 print("Cantidad de jugadores: ", cantJugadores)
 if cantJugadores==1:
     perdioAmarillo=True
+    vacunas.append(pygame.Rect(100,300,10,20))
+    vacunas.append(pygame.Rect(100,300,10,20))
+    muros=construir_mapa(mapaUnJugador, listapildoras)
 elif cantJugadores==2:
     jugador2=True
-
+    vacunas.append(pygame.Rect(200,40,10,20))
+    vacunas.append(pygame.Rect(200,570,10,20))
+    muros=construir_mapa(mapa, listapildoras)
 while jugando:
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
         if event.type==pygame.USEREVENT:
             tiempo+=1
-            print(tiempo)
+            print(tiempo) 
         if event.type == pygame.QUIT: 
         
             pygame.quit()
@@ -600,7 +601,7 @@ while jugando:
     dibujar_mapa(ventana, muros)
     if perdioAzul==False:
         dibujar_personaje(ventana,personaje)
-    if perdioAmarillo==False:
+    if perdioAmarillo==False and jugador2==True:
         dibujar_personaje2(ventana,personaje2)
     dibujar_vacunas_pildoras(ventana,listapildoras,vacunas)
 
