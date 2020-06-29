@@ -12,16 +12,7 @@ def dibujar_botones(ventana,UnJugador, DosJugadores):
     AMARILLO=(255,255,0)
     pygame.draw.rect(ventana, AMARILLO, UnJugador)
     pygame.draw.rect(ventana, AMARILLO, DosJugadores)
-##    #colores
-##    NEGRO=(0,0,0)
-##    AZUL=(0,0,255)
-##    VERDE=(0,255,0)
-##    MARRON=(150,70,10)
-##    ROJO=(255,0,0)
-##    AMARILLO=(255,255,0)
-##    BLANCO=(255,255,255)
-##    ventana=pygame.display.set_mode((ANCHO,ALTO))
-##    reloj=pygame.time.Clock()
+
 def pantallaMenu():
     BLANCO=(255,255,255)
     pygame.init()
@@ -56,12 +47,12 @@ def pantallaMenu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if cursor.colliderect(UnJugador):
                     cantJugadores=1
-                    print("cantidad de jugadores",cantJugadores)
+                    #print("cantidad de jugadores",cantJugadores)
                     salir=True
                     break 
                 if cursor.colliderect(DosJugadores):
                     cantJugadores=2
-                    print("cantidad de jugadores",cantJugadores)
+                    #print("cantidad de jugadores",cantJugadores)
                     salir=True
                     break
         pos=pygame.mouse.get_pos()
