@@ -243,8 +243,8 @@ perdioAmarillo=False                    #con este boleano controlaremos si el pe
 pildorasConsumidas=[0,0]                #Con esta lista controlamos la cantidad de item recolectados por cada pacman
 #x=0
 
-velocidad=7                         #constante para controlar la velocidad de movimiento del personaje
-velocidadEnemigo=4                  #constante para controlar la velocidad de movimiento del enemigo, si desea mayor dificultad en el juego puede aumentar el valor de esta variable
+velocidad=6        #constante para controlar la velocidad de movimiento del personaje
+velocidadEnemigo=3 #constante para controlar la velocidad de movimiento del enemigo, si desea menor dificultad en el juego puede aumentar el valor de esta variable o viceversa
 
 WASD = [False, False, False, False] #con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento del jugador 1.
 WASD2 = [False, False, False, False]#idem para el jugador o personaje 2
@@ -269,6 +269,7 @@ jugando = True  #controla el bucle principal del juego
 tiempo=0        #variable que controla el tiempo de ejecucion del programa
 tiempoparacomer=[0,0]#guardará el tiempo que tiene un pacman para eliminar Covids, luego de recolectar una vacuna
 cantJugadores=menu.pantallaMenu() #Llamando al Menu inicial que se encuentra en el otro módulo. Retorna el valor de la cantidad de jugadores
+
 jugador2=False    #variable que controlará si existe el jugador 2
 print("Cantidad de jugadores: ", cantJugadores) #solo para ver en la consola la cantidad de jugadores
 if cantJugadores==1:   #si hay un solo jugador saco al jugador2(amarillo)
@@ -285,6 +286,9 @@ elif cantJugadores==2: #si juegan los dos personajes hago True a la variable jug
     personaje= pygame.Rect(1210,570,30,30)  #creamos al personaje o jugador 1. Entre paréntesis se define ubicación y tamanio
     personaje2=pygame.Rect(1210,40,30,30)   #creamos al personaje o jugador 2. Entre paréntesis se define ubicación y tamanio
     muros=construir_mapa(mapa, listapildoras) #a la funcion construir mapa se le pasa el parametro mapa que es el determinado para dos jugadores
+else:                                       #si no selecciona jugadores y cierra la ventana, se cierra el juego
+    jugando==False
+    pygame.quit()
 while jugando:     #bucle principal del juego
 
     for event in pygame.event.get():       #event.get() detecta cuando se presiona una tecla
@@ -486,7 +490,7 @@ while jugando:     #bucle principal del juego
         anty[i]=enemigo[i].y
         antx[i]=enemigo[i].x
 
-    oldx = personaje.x  #en las variables 'old' se guarda las coordenadas antes que colisionara con el muro para que no lo atraviese y se detenga al chocar
+    oldx = personaje.x  #en las variables 'old' se guardan las coordenadas que tenia antes que colisionara con el muro para que no lo atraviese y se frene al chocar
     oldy = personaje.y
     oldx2 = personaje2.x 
     oldy2 = personaje2.y    
@@ -530,13 +534,14 @@ while jugando:     #bucle principal del juego
                         vac.height=0
                         tiempoparacomer[1]=tiempo+5
                         print("tiempoparacomer2",tiempoparacomer[1])
+
             enemigosEliminados[1]=enemigosEliminados[1]+ComeEnemigos(vac, personaje2,1)
         elif personaje2.colliderect(enemigo[i]): 
             print("Perdiste JUGADOR AMARILLO")
             print("Pildoras Consumidas: ", pildorasConsumidas[1])
             personaje2=pygame.Rect(0,0,0,0)
             perdioAmarillo=True
-              
+
     if perdioAmarillo==True and perdioAzul==True: # si los dos jugadores perdieron muestro en pantalla las estadísticas del juego
         ventana.fill(BLANCO)
         miFuente=pygame.font.Font(None,30)
@@ -566,7 +571,32 @@ while jugando:     #bucle principal del juego
             if jugador2==True: #solo si el jugador2 estaba participando del juego muestro sus estadísticas
                 ventana.blit(miTexto3,(300,300))
             pygame.display.update()
-
+    if jugador2==False and muertoEnemigo==[True,True,True,True,True]:
+        ventana.fill(BLANCO)    #limpia la pantalla de color blanco
+        miFuente=pygame.font.Font(None,30)
+        miTexto=miFuente.render("JUGADOR AZUL HAS GANADO EL JUEGO!!!",0,(200,60,80))
+        miTexto1=miFuente.render("HAS LOGRADO RESISTIR AL COVID",0,(200,60,80))
+        texto= "JUGADOR AZUL PILDORAS RECOLECTADAS: "+ str(pildorasConsumidas[0])+" COVID ELIMINADOS: "+str(enemigosEliminados[0])
+        miTexto2=miFuente.render(texto,0,(200,60,80))
+        
+        salir=False
+        while salir!=True:
+            for event in pygame.event.get():
+                if event.type==pygame.QUIT:
+                    pygame.quit()
+                    jugando=False
+                    ventana.fill(BLANCO)
+                    salir=True
+                if event.type == pygame.KEYDOWN:
+                    if event.key==pygame.K_ESCAPE:
+                        jugando=False
+                        ventana.fill(BLANCO)
+                        salir=True
+                        break
+            ventana.blit(miTexto,(300,50))
+            ventana.blit(miTexto1,(300,100))
+            ventana.blit(miTexto2,(300,200))
+            pygame.display.update()
     if pildorasConsumidas[0]+pildorasConsumidas[1]==len(listapildoras): #si los jugadores ya se comieron todos los item recolectables ganan el juego
         ventana.fill(BLANCO)    #limpia la pantalla de color blanco
         miFuente=pygame.font.Font(None,30)
@@ -611,6 +641,17 @@ while jugando:     #bucle principal del juego
     for i in range (e):
         dibujar_enemigo(ventana,enemigo[i])  #dibuja todos los enemigos
     #Actualizar Pantalla
+    if tiempoparacomer[1]>tiempo: #si el personaje2(amarillo) ha comido una vacuna tiene tiempo para comer, entra en este bucle y muestra el tiempo en pantalla
+        Fuente=pygame.font.Font(None,30)
+        mensaje="Jugador amarillo tienes 5 segundos para eliminar COVID!!! TIEMPO RESTANTE: "+ str(tiempoparacomer[1]-tiempo)
+        text=Fuente.render(mensaje,0,(0,0,0))
+        ventana.blit(text,(200,600))
+    if tiempoparacomer[0]>tiempo:#si el personaje1(azul) ha comido una vacuna tiene tiempo para comer, entra en este bucle y muestra el tiempo en pantalla
+        Fuente=pygame.font.Font(None,30)
+        mensaje="Jugador AZUL tienes 5 segundos para eliminar COVID!!! TIEMPO RESTANTE: "+ str(tiempoparacomer[0]-tiempo)
+        text=Fuente.render(mensaje,0,(0,0,0))
+        ventana.blit(text,(200,600))    
+    
     pygame.display.update()
 
 pygame.quit()
