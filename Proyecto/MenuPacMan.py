@@ -3,8 +3,7 @@ import pygame
 import math
 from pygame import Rect
 from pygame.locals import*
-###inicializar
-##os.environ['SDL_VIDEO_CENTERED'] = '1'  #para que me aparezca centrada en el monitor la ventana pygame
+
 pygame.init()
 
 #class MenuPpal:
@@ -71,7 +70,7 @@ def pantallaMenu():
 
         pygame.display.update()
     return cantJugadores
-#    pygame.quit()
+
 
 
 

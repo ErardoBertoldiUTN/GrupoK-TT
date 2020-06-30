@@ -17,7 +17,7 @@ ALTO=640
 #colores
 NEGRO=(0,0,0)
 AZUL=(0,0,255)
-VERDE=(0,255,0)
+VERDE=(0,75,0)
 MARRON=(150,70,10)
 ROJO=(255,0,0)
 AMARILLO=(255,255,0)
@@ -237,15 +237,14 @@ vacunas=[]                              #esta lista guarda las vacunas que daran
 enemigosEliminados=[0,0]                #Esta lista llevará el conteo de la cantidad de enemigos eliminados por el personaje1 y por el personaje2
 direccion=""                            #Esta cadena tomará valores "arriba, abajo, derecha o izquierda" controlando el movimiento del personaje1
 direccion2=""                           #idem para el personaje 2. Utilizaremos estas variables al momento que se produzca colisión con los muros
-personaje= pygame.Rect(1170,530,30,30)  #creamos al personaje o jugador 1. Entre paréntesis se define ubicación y tamanio
-personaje2=pygame.Rect(1170,80,30,30)   #creamos al personaje o jugador 2. Entre paréntesis se define ubicación y tamanio
+
 perdioAzul=False                        #con este boleano controlaremos si el personaje 1 a perdido el juego o no
 perdioAmarillo=False                    #con este boleano controlaremos si el personaje 2 a perdido el juego o no
 pildorasConsumidas=[0,0]                #Con esta lista controlamos la cantidad de item recolectados por cada pacman
 #x=0
 
 velocidad=7                         #constante para controlar la velocidad de movimiento del personaje
-velocidadEnemigo=5                  #constante para controlar la velocidad de movimiento del enemigo, si desea mayor dificultad en el juego puede aumentar el valor de esta variable
+velocidadEnemigo=4                  #constante para controlar la velocidad de movimiento del enemigo, si desea mayor dificultad en el juego puede aumentar el valor de esta variable
 
 WASD = [False, False, False, False] #con esta lista boolean se controla cuando se mantiene apretada una tecla de movimiento del jugador 1.
 WASD2 = [False, False, False, False]#idem para el jugador o personaje 2
@@ -274,13 +273,17 @@ jugador2=False    #variable que controlará si existe el jugador 2
 print("Cantidad de jugadores: ", cantJugadores) #solo para ver en la consola la cantidad de jugadores
 if cantJugadores==1:   #si hay un solo jugador saco al jugador2(amarillo)
     perdioAmarillo=True
-    vacunas.append(pygame.Rect(100,300,10,20))
-    vacunas.append(pygame.Rect(100,300,10,20))
+    vacunas.append(pygame.Rect(113,300,10,30))
+    vacunas.append(pygame.Rect(113,300,10,30))
+    personaje= pygame.Rect(1170,530,30,30)  #creamos al personaje o jugador 1. Entre paréntesis se define ubicación y tamanio
+    personaje2=pygame.Rect(1170,80,30,30)   #creamos al personaje o jugador 2. Entre paréntesis se define ubicación y tamanio
     muros=construir_mapa(mapaUnJugador, listapildoras) #se llama a la función contruir_mapa y se le pasa como parametro el mapa para un solo jugador
 elif cantJugadores==2: #si juegan los dos personajes hago True a la variable jugador2
     jugador2=True
-    vacunas.append(pygame.Rect(200,40,10,20))
-    vacunas.append(pygame.Rect(200,570,10,20))
+    vacunas.append(pygame.Rect(193,40,10,30))
+    vacunas.append(pygame.Rect(193,570,10,30))
+    personaje= pygame.Rect(1210,570,30,30)  #creamos al personaje o jugador 1. Entre paréntesis se define ubicación y tamanio
+    personaje2=pygame.Rect(1210,40,30,30)   #creamos al personaje o jugador 2. Entre paréntesis se define ubicación y tamanio
     muros=construir_mapa(mapa, listapildoras) #a la funcion construir mapa se le pasa el parametro mapa que es el determinado para dos jugadores
 while jugando:     #bucle principal del juego
 
